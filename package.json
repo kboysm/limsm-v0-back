@@ -5,6 +5,7 @@
    "main": "index.js",
    "scripts": {
       "start": "set NODE_ENV=production && node dist/index.js",
+      "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js",
       "debug": "export DEBUG=* && npm run start",
       "dev": "set NODE_ENV=development && nodemon src/index.ts",
       "build": "tsc -p ."

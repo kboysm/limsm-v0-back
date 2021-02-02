@@ -11,7 +11,7 @@ module.exports =  {
       process.env.NODE_ENV === 'development' ? "src/entity/**/*.*" : "dist/entity/**/*.*"
    ],
    "migrations": [
-      "src/migration/**/*.ts"
+      "dist/migration/**/*.js"
    ],
    "subscribers": [
       "src/subscriber/**/*.ts"
