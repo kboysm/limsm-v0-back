@@ -5,7 +5,7 @@
    "description": "",
    "main": "index.js",
    "scripts": {
-      "start": "rm -rf node_modules && npm install && set NODE_ENV=production && node dist/index.js",
+      "start": "npm run bulid && set NODE_ENV=production && ts-node ./dist/index.ts",
       "debug": "export DEBUG=* && npm run start",
       "dev": "set NODE_ENV=development && nodemon src/index.ts",
       "bulid": "tsc -p ."
