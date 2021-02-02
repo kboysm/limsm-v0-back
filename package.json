@@ -1,10 +1,11 @@
 {
    "name": "back",
    "version": "1.0.0",
+   "type": "module",
    "description": "",
    "main": "index.js",
    "scripts": {
-      "start": "node src/index.ts",
+      "start": "ts-node src/index.ts",
       "debug": "export DEBUG=* && npm run start",
       "dev": "nodemon src/index.ts",
       "bulid": "tsc -p ."

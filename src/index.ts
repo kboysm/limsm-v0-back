@@ -1,5 +1,4 @@
 import dotenv from 'dotenv'
-dotenv.config();
 import "reflect-metadata";
 import express from 'express'
 import * as http from 'http';
@@ -13,6 +12,7 @@ import debug from 'debug'
 import { myConnection } from './connection/index'
 import { Users } from "./entity/User";
 import  testUserList  from './testData/index'
+dotenv.config();
 
 
 
