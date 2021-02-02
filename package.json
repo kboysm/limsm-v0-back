@@ -5,10 +5,10 @@
    "description": "",
    "main": "index.js",
    "scripts": {
-      "start": "npm run bulid && set NODE_ENV=production && ts-node ./dist/index.ts",
+      "start": "set NODE_ENV=production && node dist/index.js",
       "debug": "export DEBUG=* && npm run start",
       "dev": "set NODE_ENV=development && nodemon src/index.ts",
-      "bulid": "tsc -p ."
+      "build": "tsc -p ."
    },
    "keywords": [],
    "author": "",
