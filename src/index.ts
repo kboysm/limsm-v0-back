@@ -11,7 +11,7 @@ import { CommonRoutesConfig } from './common/common.routes.config';
 import { UsersRoutes } from './users/users.routes.config';
 import debug from 'debug'
 import { myConnection } from './connection/index'
-import { Users } from "./entity/User";
+import { User } from "./entity/User";
 import  testUserList  from './testData/index'
 dotenv.config();
 
@@ -53,7 +53,7 @@ app.get('/', (req: express.Request , res: express.Response) => {
 
 myConnection.then( async connection => {
     console.log("typeorm mysql start");
-    const users = await connection.manager.find(Users);
+    const users = await connection.manager.find(User);
     const adminSearch = users.map( item => item.name );
     testUserList.forEach( async item => {
         if(!adminSearch.includes(item.name)){

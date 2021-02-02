@@ -1,5 +1,5 @@
 import { CommonRoutesConfig } from '../common/common.routes.config';
-import { Users } from "../entity/User";
+import { User } from "../entity/User";
 import { myConnection } from '../connection/index'
 import * as express from 'express'
 import {getConnection, getRepository, getManager} from 'typeorm'
@@ -26,7 +26,7 @@ export class UsersRoutes extends CommonRoutesConfig {
         this.app.route('/users')
             .get( async (req: express.Request, res: express.Response) => {
                 try{
-                    const userRepo = getManager().getRepository(Users);
+                    const userRepo = getManager().getRepository(User);
                     const userList = await userRepo.find();
                     res.status(200).send(userList)//DB 생성 후 유저 추가 로직
                 } catch(e) {
@@ -43,7 +43,7 @@ export class UsersRoutes extends CommonRoutesConfig {
             .post( (req: express.Request, res: express.Response) => {
                 const { email , password , name } = req.body
                 if( email && password && name ) {
-                    const newUser = new Users();
+                    const newUser = new User();
                         newUser.email= email
                         newUser.password= crypto.createHmac('sha256',secretKey.cryptoKey).update(password).digest('hex')
                         newUser.name= name
@@ -53,12 +53,12 @@ export class UsersRoutes extends CommonRoutesConfig {
                         newUser.updatedAt = new Date()
                         myConnection.then( async connection => {
                             console.log("signUp");
-                            const user = await connection.getRepository(Users).createQueryBuilder("user").where("user.email = :email", { email: newUser.email }).getOne();
+                            const user = await connection.getRepository(User).createQueryBuilder("user").where("user.email = :email", { email: newUser.email }).getOne();
                             console.log( user)
                             if(user){
                                 res.status(200).send('idExists')
                             }else {
-                                await getConnection().createQueryBuilder().insert().into(Users).values(
+                                await getConnection().createQueryBuilder().insert().into(User).values(
                                     newUser
                                 ).execute();
                                 res.status(200).send('signUp')
@@ -78,7 +78,7 @@ export class UsersRoutes extends CommonRoutesConfig {
             if( email && password ) {
                     myConnection.then( async connection => {
                         const cryptoPassword = crypto.createHmac('sha256',secretKey.cryptoKey).update(password).digest('hex')
-                        const user = await connection.getRepository(Users).createQueryBuilder("user").where("user.email = :email", { email }).getOne();
+                        const user = await connection.getRepository(User).createQueryBuilder("user").where("user.email = :email", { email }).getOne();
                         if(!user) {
                             res.status(200).send({ msg: 'doNotExist' , token: '' }) 
                         }
