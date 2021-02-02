@@ -52,15 +52,14 @@ app.get('/', (req: express.Request , res: express.Response) => {
 })
 
 myConnection.then( async connection => {
-    console.log(process.env.NODE_ENV)
     console.log("typeorm mysql start");
-    const users = await connection.manager.find(Users);
-    const adminSearch = users.map( item => item.name );
-    testUserList.forEach( async item => {
-        if(!adminSearch.includes(item.name)){
-            await connection.manager.save(item);
-        }
-    })
+    // const users = await connection.manager.find(Users);
+    // const adminSearch = users.map( item => item.name );
+    // testUserList.forEach( async item => {
+    //     if(!adminSearch.includes(item.name)){
+    //         await connection.manager.save(item);
+    //     }
+    // })
     console.log("typeorm mysql end");
 
 }).catch(error => console.log(error));
