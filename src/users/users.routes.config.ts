@@ -2,7 +2,7 @@ import { CommonRoutesConfig } from '../common/common.routes.config';
 import { Users } from "../entity/User";
 import { myConnection } from '../connection/index'
 import * as express from 'express'
-import {getConnection} from 'typeorm'
+import {getConnection, getRepository, getManager} from 'typeorm'
 import crypto from 'crypto'
 import secretKey from '../secretKey/index'
 import jwt from 'jsonwebtoken'
@@ -24,16 +24,10 @@ export class UsersRoutes extends CommonRoutesConfig {
     }
     configureRoutes() {
         this.app.route('/users')
-            .get( (req: express.Request, res: express.Response) => {
-                myConnection.then( connection => {
-                    // console.log("userList");
-                    // const users = connection.manager.find(Users);
-                    res.status(200).send("users")//DB 생성 후 유저 추가 로직
-                }).catch(error =>{
-                    res.status(200).send( '잘못된 요청' ) //DB 생성 후 유저 추가 로직
-                    // console.log(error)
-                });
-
+            .get( async (req: express.Request, res: express.Response) => {
+                    const userRepo = getManager().getRepository(Users);
+                    const userList = await userRepo.find();
+                    res.status(200).send(userList)//DB 생성 후 유저 추가 로직
             })
         
         this.app.route('/users')
