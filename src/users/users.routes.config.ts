@@ -25,9 +25,9 @@ export class UsersRoutes extends CommonRoutesConfig {
     configureRoutes() {
         this.app.route('/users')
             .get( (req: express.Request, res: express.Response) => {
-                myConnection.then( async connection => {
+                myConnection.then( connection => {
                     console.log("userList");
-                    const users = await connection.manager.find(Users);
+                    const users = connection.manager.find(Users);
                     res.status(200).send(users)//DB 생성 후 유저 추가 로직
                 }).catch(error =>{
                     res.status(200).send( '잘못된 요청' ) //DB 생성 후 유저 추가 로직
