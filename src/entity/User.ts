@@ -1,5 +1,7 @@
 import {Entity, PrimaryGeneratedColumn, Column , CreateDateColumn , UpdateDateColumn} from "typeorm";
 
+// 원격지 mysql의 버전이 5.5.6 , CreateDateColumn 사용불가
+
 @Entity()
 export class Users {
 
@@ -15,10 +17,10 @@ export class Users {
     @Column()
     address: string; // 주소
     
-    @CreateDateColumn({ name : 'created_at'})
+    @Column()
     createdAt: Date; //가입 날짜
     
-    @UpdateDateColumn({ name : 'updated_at'})
+    @Column()
     updatedAt: Date; // 사용자 정보 수정 날짜 - 가장 최근만 표시하기로 결정
     
     @Column()

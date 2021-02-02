@@ -24,9 +24,9 @@ export class Product extends BaseEntity {
     @Column()
     price: number; // 결제금액
 
-    @CreateDateColumn({ name : 'created_at'})
+    @Column()
     createdAt: Date; //상품 등록일
     
-    @UpdateDateColumn({ name : 'updated_at'})
+    @Column()
     updatedAt: Date; // 상품 업데이트 날짜
 }

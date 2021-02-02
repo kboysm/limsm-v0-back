@@ -15,10 +15,10 @@ export class OrderInfo extends BaseEntity {
     @Column()
     tel: string; // 연락처
     
-    @CreateDateColumn({ name : 'created_at'})
+    @Column()
     createdAt: Date; //구입 일자
     
-    @UpdateDateColumn({ name : 'updated_at'})
+    @Column()
     updatedAt: Date; // 주문 정보 변경 일자
     
     @Column()
