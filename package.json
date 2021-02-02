@@ -8,7 +8,7 @@
       "start": "set NODE_ENV=production && node dist/index.js",
       "debug": "export DEBUG=* && npm run start",
       "dev": "set NODE_ENV=development && nodemon src/index.ts",
-      "build": "tsc -p ."
+      "build": "npm run tsc"
    },
    "keywords": [],
    "author": "",
