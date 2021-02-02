@@ -4,6 +4,9 @@ import {Entity, PrimaryGeneratedColumn, Column , CreateDateColumn , UpdateDateCo
 
 @Entity()
 export class Users {
+    static find() {
+        throw new Error('Method not implemented.');
+    }
 
     @PrimaryGeneratedColumn()
     id: number; // pk
