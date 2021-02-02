@@ -1,3 +1,4 @@
+process.env.NODE_ENV = ( process.env.NODE_ENV && ( process.env.NODE_ENV ).trim().toLowerCase() == 'production' ) ? 'production' : 'development';
 import dotenv from 'dotenv'
 import "reflect-metadata";
 import express from 'express'
@@ -18,7 +19,7 @@ dotenv.config();
 
 const app: express.Application = express();
 const server: http.Server = http.createServer(app);
-const port: Number = Number(process.env.PORT) || 3000;
+const port = process.env.PORT || 3000;
 const routes: Array<CommonRoutesConfig> = [];
 const debugLog: debug.IDebugger = debug('app');
 
@@ -51,6 +52,7 @@ app.get('/', (req: express.Request , res: express.Response) => {
 })
 
 myConnection.then( async connection => {
+    console.log(process.env.NODE_ENV)
     console.log("typeorm mysql start");
     const users = await connection.manager.find(Users);
     const adminSearch = users.map( item => item.name );

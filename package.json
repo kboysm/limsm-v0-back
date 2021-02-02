@@ -5,9 +5,9 @@
    "description": "",
    "main": "index.js",
    "scripts": {
-      "start": "ts-node dist/index.js",
+      "start": "set NODE_ENV=production && node dist/index.js",
       "debug": "export DEBUG=* && npm run start",
-      "dev": "nodemon src/index.ts",
+      "dev": "set NODE_ENV=development && nodemon src/index.ts",
       "bulid": "tsc -p ."
    },
    "keywords": [],
