@@ -2,7 +2,7 @@ import {Entity, PrimaryGeneratedColumn, Column , CreateDateColumn , UpdateDateCo
 
 // 원격지 mysql의 버전이 5.5.6 , CreateDateColumn 사용불가
 
-@Entity("User")
+@Entity("user")
 export class User {
 
     @PrimaryGeneratedColumn()
