@@ -27,9 +27,9 @@ export class UsersRoutes extends CommonRoutesConfig {
             .get( async (req: express.Request, res: express.Response) => {
                 try{
                     // myConnection.then( async connection => {
-                    //     const userRepo = getManager().getRepository(User);
-                    //     const userList = await userRepo.find();
-                    //     res.status(200).send(userList)//DB 생성 후 유저 추가 로직
+                        const userRepo = getManager().getRepository(User);
+                        const userList = await userRepo.find();
+                        res.status(200).send(userList)//DB 생성 후 유저 추가 로직
                     // })
                 } catch(e) {
                     res.status(200).send(e)//DB 생성 후 유저 추가 로직
