@@ -1,5 +1,6 @@
-import { getConnectionOptions , createConnection , Connection } from "typeorm";
-
+import { connect } from "net";
+import { getConnectionOptions , createConnection , Connection, Repository,getManager } from "typeorm";
+import {User} from '../entity/User'
 let connection: Connection
 
 const connectDB = async () => {
@@ -10,6 +11,8 @@ const connectDB = async () => {
     });
     return connection;
 }
+
+export const getUser = ():Repository<User> => connection.getRepository(User);
 
 export default connectDB;
 // export let myConnection = createConnection();/

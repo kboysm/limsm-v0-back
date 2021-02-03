@@ -10,9 +10,8 @@ import  cors from 'cors'
 import { CommonRoutesConfig } from './common/common.routes.config';
 import { UsersRoutes } from './users/users.routes.config';
 import debug from 'debug'
-import connectDB from './connection/index'
-import { User } from "./entity/User";
-import  testUserList  from './testData/index'
+import connectDB , { getUser } from './connection/index'
+// import  testUserList  from './testData/index'
 dotenv.config();
 
 
@@ -47,8 +46,10 @@ app.use(expressWinston.errorLogger({
     )
 }))
 app.get('/', (req: express.Request , res: express.Response) => {
-    
-    res.status(200).send("server Up");
+    getUser().find().then( r=> {
+
+        res.status(200).send(r);
+    })
 })
 
 // myConnection.then( async connection => {
