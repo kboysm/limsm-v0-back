@@ -6,6 +6,7 @@ const connectDB = async () => {
     console.log(connectionOptions);
     connection = await createConnection({
         ...connectionOptions,
+        entities:[User],
         name: 'default'
     });
     return connection;
