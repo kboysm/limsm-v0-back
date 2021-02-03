@@ -2,11 +2,8 @@ import {Entity, PrimaryGeneratedColumn, Column , CreateDateColumn , UpdateDateCo
 
 // 원격지 mysql의 버전이 5.5.6 , CreateDateColumn 사용불가
 
-@Entity()
+@Entity("User")
 export class User {
-    static find() {
-        throw new Error('Method not implemented.');
-    }
 
     @PrimaryGeneratedColumn()
     id: number; // pk
