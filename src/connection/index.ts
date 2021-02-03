@@ -1,5 +1,5 @@
-import { createConnection , ConnectionOptions } from "typeorm";
+import { createConnection  } from "typeorm";
 import { User } from "../entity/User";
 import  testUserList  from '../testData/index'
 
-export const myConnection = createConnection();
+export let myConnection = createConnection();
