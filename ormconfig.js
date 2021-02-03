@@ -5,20 +5,20 @@ module.exports =  {
    "username": process.env.DB_USER,
    "password": process.env.DB_PASSWORD,
    "database": process.env.DB_DATABASE,
-   "synchronize": true,
-   "logging": true,
+   "synchronize": process.env.NODE_ENV === 'development' ? true : false,
+   "logging": process.env.NODE_ENV === 'development' ? false : true,
    "entities": [
-      process.env.NODE_ENV === 'development' ? "src/entity/**/*.*" : "dist/entity/**/*.*"
+      process.env.NODE_ENV === 'development' ? "src/entity/**/*.*" : "dist/entity/**/*.js"
    ],
    "migrations": [
       "dist/migration/**/*.js"
    ],
    "subscribers": [
-      "src/subscriber/**/*.ts"
+      "dist/subscriber/**/*.js"
    ],
    "cli": {
-      "entitiesDir": "src/entity",
-      "migrationsDir": "src/migration",
-      "subscribersDir": "src/subscriber"
+      "entitiesDir":process.env.NODE_ENV === 'development' ?  "src/entity" : "dist/entity",
+      "migrationsDir":process.env.NODE_ENV === 'development' ?  "src/migration" : "dist/migration",
+      "subscribersDir":process.env.NODE_ENV === 'development' ?  "src/subscriber" : "dist/subscriber"
    },
 }

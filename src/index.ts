@@ -63,8 +63,8 @@ app.get('/', (req: express.Request , res: express.Response) => {
 // }).catch(error => console.log(error));
 
 const startConnect = async () => {
-    console.log("typeorm mysql start");
-    console.log(await connectDB());
+    console.log("typeorm mysql start"); 
+        await connectDB()
 //     const users = await connection.manager.find(User);
 //     const adminSearch = users.map( item => item.name );
 //     testUserList.forEach( async item => {
