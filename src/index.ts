@@ -10,7 +10,7 @@ import  cors from 'cors'
 import { CommonRoutesConfig } from './common/common.routes.config';
 import { UsersRoutes } from './users/users.routes.config';
 import debug from 'debug'
-import connectDB , { getUser } from './connection/index'
+import connectDB from './connection/index'
 // import  testUserList  from './testData/index'
 dotenv.config();
 
@@ -46,10 +46,7 @@ app.use(expressWinston.errorLogger({
     )
 }))
 app.get('/', (req: express.Request , res: express.Response) => {
-    getUser().find().then( r=> {
-
-        res.status(200).send(r);
-    })
+        res.status(200).send('h');
 })
 
 // myConnection.then( async connection => {
@@ -67,7 +64,7 @@ app.get('/', (req: express.Request , res: express.Response) => {
 
 const startConnect = async () => {
     console.log("typeorm mysql start");
-    await connectDB();
+    console.log(await connectDB());
 //     const users = await connection.manager.find(User);
 //     const adminSearch = users.map( item => item.name );
 //     testUserList.forEach( async item => {
