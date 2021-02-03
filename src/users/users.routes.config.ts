@@ -29,7 +29,7 @@ export class UsersRoutes extends CommonRoutesConfig {
                     // myConnection.then( async connection => {
                         const manager = getConnectionManager().get('default');
                         const userList = []
-                        await manager.getRepository(User).find().then( r=>{
+                        await manager.getRepository("user").find().then( r=>{
                             userList.push(r);
                         });
                         res.status(200).send(userList)//DB 생성 후 유저 추가 로직
