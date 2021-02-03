@@ -10,7 +10,7 @@ import  cors from 'cors'
 import { CommonRoutesConfig } from './common/common.routes.config';
 import { UsersRoutes } from './users/users.routes.config';
 import debug from 'debug'
-import { myConnection } from './connection/index'
+import connectDB from './connection/index'
 import { User } from "./entity/User";
 import  testUserList  from './testData/index'
 dotenv.config();
@@ -51,19 +51,33 @@ app.get('/', (req: express.Request , res: express.Response) => {
     res.status(200).send("server Up");
 })
 
-myConnection.then( async connection => {
+// myConnection.then( async connection => {
+//     console.log("typeorm mysql start");
+//     const users = await connection.manager.find(User);
+//     const adminSearch = users.map( item => item.name );
+//     testUserList.forEach( async item => {
+//         if(!adminSearch.includes(item.name)){
+//             await connection.manager.save(item);
+//         }
+//     })
+//     console.log("typeorm mysql end");
+    
+// }).catch(error => console.log(error));
+
+const startConnect = async () => {
     console.log("typeorm mysql start");
-    const users = await connection.manager.find(User);
-    const adminSearch = users.map( item => item.name );
-    testUserList.forEach( async item => {
-        if(!adminSearch.includes(item.name)){
-            await connection.manager.save(item);
-        }
-    })
+    await connectDB();
+//     const users = await connection.manager.find(User);
+//     const adminSearch = users.map( item => item.name );
+//     testUserList.forEach( async item => {
+//         if(!adminSearch.includes(item.name)){
+//             await connection.manager.save(item);
+//         }
+//     })
     console.log("typeorm mysql end");
     
-}).catch(error => console.log(error));
-
+}
+startConnect();
 
 
 server.listen(port, ()=>{
