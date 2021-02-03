@@ -25,7 +25,7 @@ export class UsersRoutes extends CommonRoutesConfig {
     configureRoutes() {
         this.app.route('/users')
             .get( async (req: express.Request, res: express.Response) => {
-                try{
+                try{   
                     // myConnection.then( async connection => {
                         const userRepo = getManager().getRepository(User);
                         const userList = await userRepo.find();
