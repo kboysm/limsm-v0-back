@@ -2,7 +2,7 @@ import { CommonRoutesConfig } from '../common/common.routes.config';
 import { User } from "../entity/User";
 // import { myConnection } from '../connection/index'
 import * as express from 'express'
-import {getConnection, getRepository, getConnectionManager , createConnection} from 'typeorm'
+import {getConnection, getRepository, getConnectionManager , createConnection , getManager} from 'typeorm'
 import crypto from 'crypto'
 import secretKey from '../secretKey/index'
 import jwt from 'jsonwebtoken'
@@ -27,7 +27,8 @@ export class UsersRoutes extends CommonRoutesConfig {
             .get( async (req: express.Request, res: express.Response) => {
                 try{   
                     // myConnection.then( async connection => {
-                        const manager = getConnectionManager().get('default');
+                        const manager = await getManager().createQueryBuilder(User, "user").where("user.id=:id",{id:1}).getOne();
+                        console.log(manager)
                         // const userList = []
                         // await manager.getRepository("user").find().then( r=>{
                         //     userList.push(r);

@@ -67,10 +67,10 @@ app.get('/', (req: express.Request , res: express.Response) => {
 const startConnect = async () => {
     console.log("typeorm mysql start"); 
         await connectDB()
-        const manager = getConnectionManager().get('default');
-        const userList = manager.getRepository("user").find().then( r => {
-            console.log(r)
-        });
+        // const manager = getConnectionManager().get('default');
+        // const userList = manager.getRepository("user").find().then( r => {
+        //     console.log(r)
+        // });
         // console.log(userList);
 
     // testUserList.forEach( async item => {
