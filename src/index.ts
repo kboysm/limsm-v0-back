@@ -10,8 +10,10 @@ import  cors from 'cors'
 import { CommonRoutesConfig } from './common/common.routes.config';
 import { UsersRoutes } from './users/users.routes.config';
 import debug from 'debug'
-import {createConnection} from 'typeorm'
-import {User} from './entity/User';
+import connectDB from './connection/index'
+import {getConnection, getConnectionManager} from 'typeorm'
+import  testUserList  from './testData/index'
+import {User} from './entity/User'
 dotenv.config();
 
 
@@ -62,32 +64,24 @@ app.get('/', (req: express.Request , res: express.Response) => {
     
 // }).catch(error => console.log(error));
 
-createConnection({
-    "type": "mysql",
-    "host": process.env.DB_HOST,
-        "port": 3306,
-        "username": process.env.DB_USER,
-        "password": process.env.DB_PASSWORD,
-        "database": process.env.DB_DATABASE,
-        "synchronize": process.env.NODE_ENV === 'development' ? true : false,
-        "logging": process.env.NODE_ENV === 'development' ? false : true,
-        "entities": [
-            User
-        ],
-        "migrations": [
-           "dist/migration/**/*.js"
-        ],
-        "subscribers": [
-           "dist/subscriber/**/*.js"
-        ],
-        "cli": {
-           "entitiesDir":process.env.NODE_ENV === 'development' ?  "src/entity" : "dist/entity",
-           "migrationsDir":process.env.NODE_ENV === 'development' ?  "src/migration" : "dist/migration",
-           "subscribersDir":process.env.NODE_ENV === 'development' ?  "src/subscriber" : "dist/subscriber"
-        }
-}).then(async connection => {
+const startConnect = async () => {
+    console.log("typeorm mysql start"); 
+        await connectDB()
+        const manager = getConnectionManager().get('default');
+        // const userList = manager.getRepository("user").find().then( r => {
+        //     console.log(r)
+        // });
+        // console.log(userList);
 
-}, error => console.log("Cannot connect: ", error));
+    // testUserList.forEach( async item => {
+    //     if(!adminSearch.includes(item.name)){
+    //         await connection.manager.save(item);
+    //     }
+    // })
+    console.log("typeorm mysql end");
+    
+}
+startConnect();
 
 
 server.listen(port, ()=>{
