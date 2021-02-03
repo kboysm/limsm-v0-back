@@ -62,7 +62,30 @@ app.get('/', (req: express.Request , res: express.Response) => {
     
 // }).catch(error => console.log(error));
 
-createConnection().then(async connection => {
+createConnection({
+    "type": "mysql",
+    "host": process.env.DB_HOST,
+        "port": 3306,
+        "username": process.env.DB_USER,
+        "password": process.env.DB_PASSWORD,
+        "database": process.env.DB_DATABASE,
+        "synchronize": process.env.NODE_ENV === 'development' ? true : false,
+        "logging": process.env.NODE_ENV === 'development' ? false : true,
+        "entities": [
+            User
+        ],
+        "migrations": [
+           "dist/migration/**/*.js"
+        ],
+        "subscribers": [
+           "dist/subscriber/**/*.js"
+        ],
+        "cli": {
+           "entitiesDir":process.env.NODE_ENV === 'development' ?  "src/entity" : "dist/entity",
+           "migrationsDir":process.env.NODE_ENV === 'development' ?  "src/migration" : "dist/migration",
+           "subscribersDir":process.env.NODE_ENV === 'development' ?  "src/subscriber" : "dist/subscriber"
+        }
+}).then(async connection => {
 
 }, error => console.log("Cannot connect: ", error));
 
