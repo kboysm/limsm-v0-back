@@ -10,10 +10,8 @@ import  cors from 'cors'
 import { CommonRoutesConfig } from './common/common.routes.config';
 import { UsersRoutes } from './users/users.routes.config';
 import debug from 'debug'
-import connectDB from './connection/index'
-import {getConnection, getConnectionManager} from 'typeorm'
-import  testUserList  from './testData/index'
-import {User} from './entity/User'
+import {createConnection} from 'typeorm'
+import {User} from './entity/User';
 dotenv.config();
 
 
@@ -64,24 +62,9 @@ app.get('/', (req: express.Request , res: express.Response) => {
     
 // }).catch(error => console.log(error));
 
-const startConnect = async () => {
-    console.log("typeorm mysql start"); 
-        await connectDB()
-        // const manager = getConnectionManager().get('default');
-        // const userList = manager.getRepository("user").find().then( r => {
-        //     console.log(r)
-        // });
-        // console.log(userList);
+createConnection().then(async connection => {
 
-    // testUserList.forEach( async item => {
-    //     if(!adminSearch.includes(item.name)){
-    //         await connection.manager.save(item);
-    //     }
-    // })
-    console.log("typeorm mysql end");
-    
-}
-startConnect();
+}, error => console.log("Cannot connect: ", error));
 
 
 server.listen(port, ()=>{

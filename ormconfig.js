@@ -1,6 +1,5 @@
-// import path from 'path';
-
 module.exports =  {
+   "name": "default",
    "type": "mysql",
    "host": process.env.DB_HOST,
    "port": process.env.DB_PORT,
@@ -10,8 +9,9 @@ module.exports =  {
    "synchronize": process.env.NODE_ENV === 'development' ? true : false,
    "logging": process.env.NODE_ENV === 'development' ? false : true,
    "entities": [
-      process.env.NODE_ENV === 'development' ? "src/entity/**/*.*" : "dist/entity/**/*.js"
-      // path.resolve(__dirname, '**/*.entity{.ts,.js}'),
+      process.env.NODE_ENV === 'development' ? "src/entity/*.*" : "dist/entity/*.*"
+
+      // path.resolve(__dirname, '**/*.entity{.ts,.js}')
    ],
    "migrations": [
       "dist/migration/**/*.js"
