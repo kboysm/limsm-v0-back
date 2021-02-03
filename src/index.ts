@@ -47,22 +47,25 @@ app.use(expressWinston.errorLogger({
     )
 }))
 
+
+
+
+
 app.get('/', (req: express.Request , res: express.Response) => {
-    res.status(200).send('Server Up');
+    myConnection.then( async connection => {
+        console.log("typeorm mysql start");
+        const users = await connection.manager.find(User);
+        const adminSearch = users.map( item => item.name );
+        testUserList.forEach( async item => {
+            if(!adminSearch.includes(item.name)){
+                await connection.manager.save(item);
+            }
+        })
+        console.log("typeorm mysql end");
+        
+        res.status(200).send(users);
+    }).catch(error => console.log(error));
 })
-
-myConnection.then( async connection => {
-    console.log("typeorm mysql start");
-    const users = await connection.manager.find(User);
-    const adminSearch = users.map( item => item.name );
-    testUserList.forEach( async item => {
-        if(!adminSearch.includes(item.name)){
-            await connection.manager.save(item);
-        }
-    })
-    console.log("typeorm mysql end");
-
-}).catch(error => console.log(error));
 
 server.listen(port, ()=>{
     debugLog(`Server running at http://localhost:${port}`);

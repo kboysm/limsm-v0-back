@@ -21,7 +21,7 @@ module.exports =  {
       "migrationsDir": "src/migration",
       "subscribersDir": "src/subscriber"
    },
-   "extra": {
-      "connectionLimit": 5
-  }
+   "ssl": {
+      rejectUnauthorized: false
+   }
 }
