@@ -27,7 +27,6 @@ export class UsersRoutes extends CommonRoutesConfig {
             .get( async (req: express.Request, res: express.Response) => {
                 try{   
                         const userList = await  getConnection().getRepository(User).find();
-                        
                         res.status(200).send(userList)//DB 생성 후 유저 추가 로직
                 } catch(e) {
                     res.status(200).send(e)//DB 생성 후 유저 추가 로직
@@ -37,65 +36,66 @@ export class UsersRoutes extends CommonRoutesConfig {
                 res.status(200).send( `List Of Users `) //DB 생성 후 유저 추가 로직
             })
         
-        // this.app.route('/signUp')
-        //     .post( (req: express.Request, res: express.Response) => {
-        //         const { email , password , name } = req.body
-        //         if( email && password && name ) {
-        //             const newUser = new User();
-        //                 newUser.email= email
-        //                 newUser.password= crypto.createHmac('sha256',secretKey.cryptoKey).update(password).digest('hex')
-        //                 newUser.name= name
-        //                 newUser.age= 0
-        //                 newUser.address= ''
-        //                 newUser.createdAt = new Date()
-        //                 newUser.updatedAt = new Date()
-        //                 myConnection.then( async connection => {
-        //                     console.log("signUp");
-        //                     const user = await connection.getRepository(User).createQueryBuilder("user").where("user.email = :email", { email: newUser.email }).getOne();
-        //                     console.log( user)
-        //                     if(user){
-        //                         res.status(200).send('idExists')
-        //                     }else {
-        //                         await getConnection().createQueryBuilder().insert().into(User).values(
-        //                             newUser
-        //                         ).execute();
-        //                         res.status(200).send('signUp')
-        //                     }
-        //                     // res.status(200).send(user)
-        //                 }).catch(error =>{
-        //                     res.status(200).send( 'signUpFail' ) //DB 생성 후 유저 추가 로직
-        //                 });
+        this.app.route('/signUp')
+            .post( async(req: express.Request, res: express.Response) => {
+                const { email , password , name } = req.body
+                if( email && password && name ) {
+                    const newUser = new User();
+                        newUser.email= email
+                        newUser.password= crypto.createHmac('sha256',secretKey.cryptoKey).update(password).digest('hex')
+                        newUser.name= name
+                        newUser.age= 0
+                        newUser.address= ''
+                        newUser.createdAt = new Date()
+                        newUser.updatedAt = new Date()
 
-        //         }
-        //         // res.status(200).send( `List Of Users `) //DB 생성 후 유저 추가 로직
-        //     })
+                            const user = await getConnection().getRepository(User).createQueryBuilder("user").where("user.email = :email", { email: newUser.email }).getOne();
+                            if(user){
+                                res.status(200).send('idExists')
+                            }else {
+                                await getConnection().createQueryBuilder().insert().into(User).values(
+                                    newUser
+                                ).execute();
+                                res.status(200).send('signUp')
+                            }
+                            // res.status(200).send(user)
+
+                            res.status(200).send( 'signUpFail' ) //DB 생성 후 유저 추가 로직
+
+
+                }
+                // res.status(200).send( `List Of Users `) //DB 생성 후 유저 추가 로직
+            })
         
-        // this.app.route('/signIn')
-        // .post( (req: express.Request, res: express.Response) => {
-        //     const { email , password  } = req.body
-        //     if( email && password ) {
-        //             myConnection.then( async connection => {
-        //                 const cryptoPassword = crypto.createHmac('sha256',secretKey.cryptoKey).update(password).digest('hex')
-        //                 const user = await connection.getRepository(User).createQueryBuilder("user").where("user.email = :email", { email }).getOne();
-        //                 if(!user) {
-        //                     res.status(200).send({ msg: 'doNotExist' , token: '' }) 
-        //                 }
-        //                 if(user.password === cryptoPassword){
-        //                     const r = jwt.sign({id: user.id ,email: user.email , name:user.name} , secretKey.jwtKey);
-        //                     res.status(200).send({ msg: 'signIn' , token: r, user})
-        //                 }else {
-        //                     res.status(200).send({ msg: 'passwordsDoNotMatch' , token: '' })
-        //                 }
-        //                 // res.status(200).send(user)
-        //             }).catch(error =>{
-        //                 res.status(200).send({ msg: 'signInFail' , token: '' }) //DB 생성 후 유저 추가 로직
-        //             });
-
-        //     }else {
-        //         res.status(200).send({ msg: 'emailAndPasswordDoNotEnter' , token: '' })
-        //     }
-           
-        // })
+        this.app.route('/signIn')
+        .post( async(req: express.Request, res: express.Response) => {
+            const { email , password  } = req.body
+            console.log( email , password );
+            // try{
+            //     if( email && password ) {
+            //             const cryptoPassword = crypto.createHmac('sha256',secretKey.cryptoKey).update(password).digest('hex')
+            //             const user_ = await getManager().createQueryBuilder(User, "user").where("user.email = :email", { email }).getOne()
+            //             if(!user_) {
+            //                 res.status(200).send({ msg: 'doNotExist' , token: '' }) 
+            //                 return
+            //             }
+            //             if(user_.password === cryptoPassword){
+            //                 const r = jwt.sign({id: user_.id ,email: user_.email , name:user_.name} , secretKey.jwtKey);
+            //                 res.status(200).send({ msg: 'signIn' , token: r, user_})
+            //             }
+            //             else {
+            //                 res.status(200).send({ msg: 'passwordsDoNotMatch' , token: '' })
+            //             }
+            //             // res.status(200).send(user_)
+            //             res.status(200).send({ msg: 'signInFail' , token: '' }) //DB 생성 후 유저 추가 로직
+                    
+            //     }else {
+            //         res.status(200).send({ msg: 'emailAndPasswordDoNotEnter' , token: '' })
+            //     }
+            // } catch(e) {
+            //     res.status(200).send({ msg: e , token: '' })
+            // }
+        })
 
         this.app.route('/user/:userId')
             .all( (req: express.Request, res: express.Response, next: express.NextFunction) => {//미들웨어 유저 인증 용도
