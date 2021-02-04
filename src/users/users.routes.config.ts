@@ -55,12 +55,14 @@ export class UsersRoutes extends CommonRoutesConfig {
                             }else {
                                 await getConnection().createQueryBuilder().insert().into(User).values(
                                     newUser
-                                ).execute();
-                                res.status(200).send('signUp')
+                                ).execute().then( r=> {
+                                    res.status(200).send('signUp')
+                                }).catch(e => {
+                                    res.status(200).send( 'signUpFail' ) //DB 생성 후 유저 추가 로직
+                                });
                             }
                             // res.status(200).send(user)
 
-                            res.status(200).send( 'signUpFail' ) //DB 생성 후 유저 추가 로직
 
 
                 }
