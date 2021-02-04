@@ -71,30 +71,31 @@ export class UsersRoutes extends CommonRoutesConfig {
         .post( async(req: express.Request, res: express.Response) => {
             const { email , password  } = req.body
             console.log( email , password );
-            // try{
-            //     if( email && password ) {
-            //             const cryptoPassword = crypto.createHmac('sha256',secretKey.cryptoKey).update(password).digest('hex')
-            //             const user_ = await getManager().createQueryBuilder(User, "user").where("user.email = :email", { email }).getOne()
-            //             if(!user_) {
-            //                 res.status(200).send({ msg: 'doNotExist' , token: '' }) 
-            //                 return
-            //             }
-            //             if(user_.password === cryptoPassword){
-            //                 const r = jwt.sign({id: user_.id ,email: user_.email , name:user_.name} , secretKey.jwtKey);
-            //                 res.status(200).send({ msg: 'signIn' , token: r, user_})
-            //             }
-            //             else {
-            //                 res.status(200).send({ msg: 'passwordsDoNotMatch' , token: '' })
-            //             }
-            //             // res.status(200).send(user_)
-            //             res.status(200).send({ msg: 'signInFail' , token: '' }) //DB 생성 후 유저 추가 로직
-                    
-            //     }else {
-            //         res.status(200).send({ msg: 'emailAndPasswordDoNotEnter' , token: '' })
-            //     }
-            // } catch(e) {
-            //     res.status(200).send({ msg: e , token: '' })
-            // }
+            try{
+                if( email && password ) {
+                        const cryptoPassword = crypto.createHmac('sha256',secretKey.cryptoKey).update(password).digest('hex')
+                        const user_ = await getManager().createQueryBuilder(User, "user").where("user.email = :email", { email }).getOne()
+                        if(!user_) {
+                            res.status(200).send({ msg: 'doNotExist' , token: '' }) 
+                            return
+                        }
+                        if(user_.password === cryptoPassword){
+                            const r = jwt.sign({id: user_.id ,email: user_.email , name:user_.name} , secretKey.jwtKey);
+                            if(!r) {
+                                res.status(200).send({ msg: 'signInFail' , token: '' }) //DB 생성 후 유저 추가 로직
+                                return
+                            }
+                            res.status(200).send({ msg: 'signIn' , token: r, user_})
+                        }
+                        else {
+                            res.status(200).send({ msg: 'passwordsDoNotMatch' , token: '' })
+                        }
+                }else {
+                    res.status(200).send({ msg: 'emailAndPasswordDoNotEnter' , token: '' }) 
+                }
+            } catch(e) {
+                res.status(200).send({ msg: e , token: '' })
+            }
         })
 
         this.app.route('/user/:userId')
