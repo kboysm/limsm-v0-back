@@ -16,6 +16,7 @@ import { getConnection, getConnectionManager } from 'typeorm'
 import { userList , productList}  from './testData/index'
 import { User } from './entity/User'
 import { Product } from './entity/Product'
+
 dotenv.config();
 
 const app: express.Application = express();
@@ -54,6 +55,7 @@ app.get('/img/:imgName', (req: express.Request , res: express.Response) => { // 
     const imgName = req.params.imgName;
     console.log( imgName );
     res.status(200).sendFile(__dirname+'/img/'+imgName)
+    // res.status(200).send(__dirname+'/img/'+imgName)
 })
 
 const startConnect = async () => {

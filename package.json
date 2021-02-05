@@ -8,7 +8,7 @@
       "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js",
       "debug": "export DEBUG=* && npm run start",
       "dev": "set NODE_ENV=development && nodemon src/index.ts",
-      "build": "tsc -p ."
+      "build": "tsc && copyfiles -u 1 src/**/*.PNG dist"
    },
    "keywords": [],
    "author": "",
@@ -33,6 +33,7 @@
       "@types/jsonwebtoken": "^8.5.0",
       "@types/mysql": "^2.15.17",
       "@types/node": "^8.0.29",
+      "copyfiles": "^2.4.1",
       "nodemon": "^2.0.7",
       "source-map-support": "^0.5.19",
       "ts-node": "^3.3.0",
