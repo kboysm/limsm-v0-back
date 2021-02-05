@@ -64,7 +64,7 @@ const priceList: Array<number> = [
     758990,998990,1778990,6300000,359000,3798990,1838990,468990
 ]
 
-for(let i=0 ; i <7 ; i++){
+for(let i=0 ; i <8 ; i++){
     const product: Product = new Product();
     product.imgUrl = 'img/'+ i +'.PNG'
     product.name= ProductNameList[i];

@@ -66,13 +66,14 @@ const startConnect = async () => {
         //         await connection.manager.save(item);
         //     }
         // })
-        const products = await connection.manager.find(Product);
-        const nameSearch = products.map( item => item.name );
-        productList.forEach( async item => {
-            if(!nameSearch.includes(item.name)){
-                await connection.manager.save(item);
-            }
-        })
+        // const products = await connection.manager.find(Product);
+        // const nameSearch = products.map( item => item.name );
+        // console.log('asdasdasd : ' , productList)
+        // productList.forEach( async item => {
+        //     if(!nameSearch.includes(item.name)){
+        //         await connection.manager.save(item);
+        //     }
+        // })
     console.log("typeorm mysql end");
     
 }
