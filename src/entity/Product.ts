@@ -1,10 +1,13 @@
 import {Entity , BaseEntity, PrimaryGeneratedColumn, Column , CreateDateColumn , UpdateDateColumn} from "typeorm";
 
-@Entity()
-export class Product extends BaseEntity {
+@Entity("product")
+export class Product {
 
     @PrimaryGeneratedColumn()
     id: number; // pk
+
+    @Column()
+    imgUrl: string; // 이미지
 
     @Column()
     name: string; // 상품명

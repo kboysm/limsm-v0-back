@@ -1,12 +1,13 @@
 import { getConnectionOptions , createConnection , Connection, Repository,getManager } from "typeorm";
 import {User} from '../entity/User'
+import {Product} from '../entity/Product'
 let connection: Connection
 const connectDB = async () => {
     const connectionOptions = await getConnectionOptions();
     console.log(connectionOptions);
     connection = await createConnection({
         ...connectionOptions,
-        entities:[User],
+        entities:[User,Product],
     });
     return connection;
 }

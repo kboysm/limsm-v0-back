@@ -9,14 +9,14 @@ import * as expressWinston from 'express-winston'
 import  cors from 'cors'
 import { CommonRoutesConfig } from './common/common.routes.config';
 import { UsersRoutes } from './users/users.routes.config';
+import { ProductsRoutes } from './products/products.routes.config';
 import debug from 'debug'
 import connectDB from './connection/index'
-import {getConnection, getConnectionManager} from 'typeorm'
-import  testUserList  from './testData/index'
-import {User} from './entity/User'
+import { getConnection, getConnectionManager } from 'typeorm'
+import { userList , productList}  from './testData/index'
+import { User } from './entity/User'
+import { Product } from './entity/Product'
 dotenv.config();
-
-
 
 const app: express.Application = express();
 const server: http.Server = http.createServer(app);
@@ -35,8 +35,8 @@ app.use( expressWinston.logger({
         winston.format.json()
     )
 }))
-
 routes.push( new UsersRoutes(app) );
+routes.push( new ProductsRoutes(app) );
 
 app.use(expressWinston.errorLogger({
     transports: [
@@ -50,41 +50,29 @@ app.use(expressWinston.errorLogger({
 app.get('/', (req: express.Request , res: express.Response) => {
         res.status(200).send('h');
 })
-
-// myConnection.then( async connection => {
-//     console.log("typeorm mysql start");
-//     const users = await connection.manager.find(User);
-//     const adminSearch = users.map( item => item.name );
-//     testUserList.forEach( async item => {
-//         if(!adminSearch.includes(item.name)){
-//             await connection.manager.save(item);
-//         }
-//     })
-//     console.log("typeorm mysql end");
-    
-// }).catch(error => console.log(error));
+app.get('/img/:imgName', (req: express.Request , res: express.Response) => { // 정적 파일 이미지 간단한 라우트
+    const imgName = req.params.imgName;
+    console.log( imgName );
+    res.status(200).sendFile(__dirname+'/img/'+imgName)
+})
 
 const startConnect = async () => {
     console.log("typeorm mysql start"); 
         const connection = await connectDB()
-        const users = await connection.manager.find(User);
-        const adminSearch = users.map( item => item.name );
-        testUserList.forEach( async item => {
-            if(!adminSearch.includes(item.name)){
+        // const users = await connection.manager.find(User);
+        // const adminSearch = users.map( item => item.name );
+        // userList.forEach( async item => {
+        //     if(!adminSearch.includes(item.name)){
+        //         await connection.manager.save(item);
+        //     }
+        // })
+        const products = await connection.manager.find(Product);
+        const nameSearch = products.map( item => item.name );
+        productList.forEach( async item => {
+            if(!nameSearch.includes(item.name)){
                 await connection.manager.save(item);
             }
         })
-        // const manager = getConnectionManager().get('default');
-        // const userList = manager.getRepository("user").find().then( r => {
-        //     console.log(r)
-        // });
-        // console.log(userList);
-
-    // testUserList.forEach( async item => {
-    //     if(!adminSearch.includes(item.name)){
-    //         await connection.manager.save(item);
-    //     }
-    // })
     console.log("typeorm mysql end");
     
 }
@@ -97,17 +85,3 @@ server.listen(port, ()=>{
         debugLog(`Routes configured from ${route.getName()}`);
     })
 })
-
-// createConnection().then( async connection => {
-
-//     console.log("typeorm mysql start");
-//     const users = await connection.manager.find(Users);
-//     const adminSearch = users.map( item => item.name );
-//     testUserList.forEach( async item => {
-//         if(!adminSearch.includes(item.name)){
-//             await connection.manager.save(item);
-//         }
-//     })
-//     console.log("typeorm mysql end");
-
-// }).catch(error => console.log(error));

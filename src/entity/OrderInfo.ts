@@ -1,7 +1,7 @@
 import {Entity , BaseEntity, PrimaryGeneratedColumn, Column , CreateDateColumn , UpdateDateColumn} from "typeorm";
 
-@Entity()
-export class OrderInfo extends BaseEntity {
+@Entity("orderinfo")
+export class OrderInfo {
 
     @PrimaryGeneratedColumn()
     id: number; // pk

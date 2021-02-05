@@ -62,9 +62,6 @@ export class UsersRoutes extends CommonRoutesConfig {
                                 });
                             }
                             // res.status(200).send(user)
-
-
-
                 }
                 // res.status(200).send( `List Of Users `) //DB 생성 후 유저 추가 로직
             })
@@ -99,7 +96,6 @@ export class UsersRoutes extends CommonRoutesConfig {
                 res.status(200).send({ msg: e , token: '' })
             }
         })
-
         this.app.route('/user/:userId')
             .all( (req: express.Request, res: express.Response, next: express.NextFunction) => {//미들웨어 유저 인증 용도
                 const token: string = req.headers['authorization']
