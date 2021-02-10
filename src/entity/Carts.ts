@@ -13,6 +13,6 @@ export class Carts {
     @OneToOne(type => User , user => user.carts)
     user: User;
 
-    @OneToMany( type => CartProduct , cp => cp.id)
+    @OneToMany( type => CartProduct , cp => cp.cart)
     cartProduct:CartProduct[];
 }

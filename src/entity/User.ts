@@ -32,7 +32,7 @@ export class User {
 
     @OneToOne ( type => Carts , cart => cart.id)
     @JoinColumn()
-    carts: Carts;
+    carts:Carts;
 
     @OneToMany(type => OrderInfo, orderinfo => orderinfo.user)
     orderInfo: OrderInfo[];

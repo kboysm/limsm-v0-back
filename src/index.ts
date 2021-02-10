@@ -15,6 +15,7 @@ import connectDB from './connection/index'
 import { getConnection, getConnectionManager, createQueryBuilder } from 'typeorm'
 import { userList , productList}  from './testData/index'
 import { User } from './entity/User'
+import { CartProduct } from './entity/CartProduct'
 import { Product } from './entity/Product'
 import { Carts } from './entity/Carts'
 
@@ -62,30 +63,55 @@ app.get('/img/:imgName', (req: express.Request , res: express.Response) => { // 
 const startConnect = async () => {
     console.log("typeorm mysql start"); 
         const connection = await connectDB()
-        const users = await connection.manager.find(User);
-        const adminSearch = users.map( item => item.name );
-        userList.forEach( async item => {
-            if(!adminSearch.includes(item.name)){
-                const cart = new Carts();
-                await connection.manager.save(cart);
-                item.carts = cart;
-                await connection.manager.save(item);
-            }
-        })
-        const products = await connection.manager.find(Product);
-        const nameSearch = products.map( item => item.name );
-        console.log('asdasdasd : ' , productList)
-        productList.forEach( async item => {
-            if(!nameSearch.includes(item.name)){
-                await connection.manager.save(item);
-            }
-        })
-        const user = await connection
-            .getRepository(User)
-            .createQueryBuilder("user")
-            .leftJoinAndSelect("user.carts", "carts")
-            .getMany();
-            console.log(user);
+        // const users = await connection.manager.find(User);
+        // const adminSearch = users.map( item => item.name );
+        // userList.forEach( async item => {
+        //     if(!adminSearch.includes(item.name)){
+        //         const cart = new Carts();
+        //         await connection.manager.save(cart);
+        //         item.carts = cart;
+        //         await connection.manager.save(item);
+        //     }
+        // })
+        // const products = await connection.manager.find(Product);
+        // const nameSearch = products.map( item => item.name );
+        // console.log('asdasdasd : ' , productList)
+        // productList.forEach( async item => {
+        //     if(!nameSearch.includes(item.name)){
+        //         await connection.manager.save(item);
+        //     }
+        // })
+        // const user = await connection
+        //     .getRepository(User)
+        //     .createQueryBuilder("user")
+        //     .leftJoinAndSelect("user.carts", "carts")
+        //     .getMany();
+        //     console.log(user);
+        // const p1 = await connection
+        // .getRepository(Product)
+        // .createQueryBuilder("product")
+        // .where("product.id = :id", { id: 1 })
+        // .getOne();
+        // const cartP = new CartProduct();
+        // cartP.imgUrl = p1.imgUrl
+        // cartP.name = p1.name
+        // cartP.description = p1.description
+        // cartP.quantity = p1.quantity
+        // cartP.grade = p1.grade
+        // cartP.salesQuantity = p1.salesQuantity
+        // cartP.price = p1.price
+        // cartP.createdAt = new Date();
+        // cartP.updatedAt = new Date();
+        // cartP.purchaseQuantity = 1;
+        // await connection.manager.save(cartP);
+        // const cart = await connection
+        // .getRepository(Carts)
+        // .createQueryBuilder("carts")
+        // .where("carts.id = :id", { id: 1 })
+        // .getOne();
+        // cart.cartProduct = [cartP];
+        // await connection.manager.save(cart);
+        // console.log(cart);
         //     console.log("typeorm mysql end");
     
 }
