@@ -1,21 +1,15 @@
-import {Entity, PrimaryGeneratedColumn, Column , OneToOne,  CreateDateColumn , UpdateDateColumn, JoinColumn, ManyToOne} from "typeorm";
-import {Product} from './Product'
-import {User} from './User'
-// 원격지 mysql의 버전이 5.5.6 , CreateDateColumn 사용불가
-
+import {Entity , BaseEntity,ManyToOne, PrimaryGeneratedColumn, Column ,OneToMany, CreateDateColumn , UpdateDateColumn} from "typeorm";
+import { Product } from './Product'
+import { Carts } from './Carts'
 @Entity("cartproduct")
-export class CartProduct {
+export class CartProduct extends Product {
 
     @PrimaryGeneratedColumn()
-    cartId: number; // pk
-
-    @OneToOne( type => Product)
-    @JoinColumn()
-    product:Product;
+    id: number; // pk
 
     @Column()
     purchaseQuantity: number;
 
-    @ManyToOne(type => User , user => user.carts)
-    user: User;
+    @ManyToOne(type => Carts , cart => cart.id)
+    cart: Carts;
 }

@@ -1,5 +1,4 @@
-import {Entity , BaseEntity, PrimaryGeneratedColumn, Column , CreateDateColumn , UpdateDateColumn} from "typeorm";
-
+import {Entity , BaseEntity,ManyToOne, PrimaryGeneratedColumn, Column ,OneToMany, CreateDateColumn , UpdateDateColumn} from "typeorm";
 @Entity("product")
 export class Product {
 

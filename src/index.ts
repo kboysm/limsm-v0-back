@@ -12,10 +12,11 @@ import { UsersRoutes } from './users/users.routes.config';
 import { ProductsRoutes } from './products/products.routes.config';
 import debug from 'debug'
 import connectDB from './connection/index'
-import { getConnection, getConnectionManager } from 'typeorm'
+import { getConnection, getConnectionManager, createQueryBuilder } from 'typeorm'
 import { userList , productList}  from './testData/index'
 import { User } from './entity/User'
 import { Product } from './entity/Product'
+import { Carts } from './entity/Carts'
 
 dotenv.config();
 
@@ -61,22 +62,31 @@ app.get('/img/:imgName', (req: express.Request , res: express.Response) => { // 
 const startConnect = async () => {
     console.log("typeorm mysql start"); 
         const connection = await connectDB()
-        // const users = await connection.manager.find(User);
-        // const adminSearch = users.map( item => item.name );
-        // userList.forEach( async item => {
-        //     if(!adminSearch.includes(item.name)){
-        //         await connection.manager.save(item);
-        //     }
-        // })
-        // const products = await connection.manager.find(Product);
-        // const nameSearch = products.map( item => item.name );
-        // console.log('asdasdasd : ' , productList)
-        // productList.forEach( async item => {
-        //     if(!nameSearch.includes(item.name)){
-        //         await connection.manager.save(item);
-        //     }
-        // })
-    console.log("typeorm mysql end");
+        const users = await connection.manager.find(User);
+        const adminSearch = users.map( item => item.name );
+        userList.forEach( async item => {
+            if(!adminSearch.includes(item.name)){
+                const cart = new Carts();
+                await connection.manager.save(cart);
+                item.carts = cart;
+                await connection.manager.save(item);
+            }
+        })
+        const products = await connection.manager.find(Product);
+        const nameSearch = products.map( item => item.name );
+        console.log('asdasdasd : ' , productList)
+        productList.forEach( async item => {
+            if(!nameSearch.includes(item.name)){
+                await connection.manager.save(item);
+            }
+        })
+        const user = await connection
+            .getRepository(User)
+            .createQueryBuilder("user")
+            .leftJoinAndSelect("user.carts", "carts")
+            .getMany();
+            console.log(user);
+        //     console.log("typeorm mysql end");
     
 }
 startConnect();
