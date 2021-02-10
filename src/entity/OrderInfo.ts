@@ -1,5 +1,5 @@
-import {Entity , BaseEntity, PrimaryGeneratedColumn, Column , CreateDateColumn , UpdateDateColumn} from "typeorm";
-
+import {Entity , BaseEntity, PrimaryGeneratedColumn, Column , CreateDateColumn , UpdateDateColumn, ManyToOne} from "typeorm";
+import { User } from './User'
 @Entity("orderinfo")
 export class OrderInfo {
 
@@ -24,5 +24,7 @@ export class OrderInfo {
     @Column()
     payment: number; // 결제금액
 
+    @ManyToOne(type => User , user => user.orderInfo)
+    user: User;
 
 }

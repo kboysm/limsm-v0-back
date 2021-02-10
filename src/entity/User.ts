@@ -1,5 +1,6 @@
-import {Entity, PrimaryGeneratedColumn, Column , CreateDateColumn , UpdateDateColumn} from "typeorm";
-
+import {Entity, PrimaryGeneratedColumn, Column , CreateDateColumn , UpdateDateColumn, OneToMany} from "typeorm";
+import {CartProduct} from './CartProduct'
+import {OrderInfo} from './OrderInfo'
 // 원격지 mysql의 버전이 5.5.6 , CreateDateColumn 사용불가
 
 @Entity("user")
@@ -29,6 +30,9 @@ export class User {
     @Column()
     email: string; // 사용자 비밀번호
 
+    @OneToMany ( type => CartProduct , cartProduct => cartProduct.user)
+    carts: CartProduct[];
 
-
+    @OneToMany(type => OrderInfo, orderinfo => orderinfo.user)
+    orderInfo: OrderInfo[];
 }
