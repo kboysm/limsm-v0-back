@@ -10,6 +10,7 @@ import  cors from 'cors'
 import { CommonRoutesConfig } from './common/common.routes.config';
 import { UsersRoutes } from './users/users.routes.config';
 import { ProductsRoutes } from './products/products.routes.config';
+import { CartsRoutes } from './carts/carts.routes.config';
 import debug from 'debug'
 import connectDB from './connection/index'
 import { getConnection, getConnectionManager, createQueryBuilder } from 'typeorm'
@@ -40,6 +41,7 @@ app.use( expressWinston.logger({
 }))
 routes.push( new UsersRoutes(app) );
 routes.push( new ProductsRoutes(app) );
+routes.push( new CartsRoutes(app) );
 
 app.use(expressWinston.errorLogger({
     transports: [
@@ -81,37 +83,7 @@ const startConnect = async () => {
         //         await connection.manager.save(item);
         //     }
         // })
-        // const user = await connection
-        //     .getRepository(User)
-        //     .createQueryBuilder("user")
-        //     .leftJoinAndSelect("user.carts", "carts")
-        //     .getMany();
-        //     console.log(user);
-        // const p1 = await connection
-        // .getRepository(Product)
-        // .createQueryBuilder("product")
-        // .where("product.id = :id", { id: 1 })
-        // .getOne();
-        // const cartP = new CartProduct();
-        // cartP.imgUrl = p1.imgUrl
-        // cartP.name = p1.name
-        // cartP.description = p1.description
-        // cartP.quantity = p1.quantity
-        // cartP.grade = p1.grade
-        // cartP.salesQuantity = p1.salesQuantity
-        // cartP.price = p1.price
-        // cartP.createdAt = new Date();
-        // cartP.updatedAt = new Date();
-        // cartP.purchaseQuantity = 1;
-        // await connection.manager.save(cartP);
-        // const cart = await connection
-        // .getRepository(Carts)
-        // .createQueryBuilder("carts")
-        // .where("carts.id = :id", { id: 1 })
-        // .getOne();
-        // cart.cartProduct = [cartP];
-        // await connection.manager.save(cart);
-        // console.log(cart);
+        //
         //     console.log("typeorm mysql end");
     
 }

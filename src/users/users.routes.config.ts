@@ -2,7 +2,7 @@ import { CommonRoutesConfig } from '../common/common.routes.config';
 import { User } from "../entity/User";
 // import { myConnection } from '../connection/index'
 import * as express from 'express'
-import {getConnection, getRepository, getConnectionManager , createConnection , getManager } from 'typeorm'
+import {getConnection, getRepository, getConnectionManager  , getManager } from 'typeorm'
 import crypto from 'crypto'
 import secretKey from '../secretKey/index'
 import jwt from 'jsonwebtoken'
@@ -73,7 +73,7 @@ export class UsersRoutes extends CommonRoutesConfig {
             try{
                 if( email && password ) {
                         const cryptoPassword = crypto.createHmac('sha256',secretKey.cryptoKey).update(password).digest('hex')
-                        const user_ = await getManager().createQueryBuilder(User, "user").where("user.email = :email", { email }).getOne()
+                        const user_ = await getManager().createQueryBuilder(User, "user").leftJoinAndSelect("user.carts", "carts").where("user.email = :email", { email }).getOne()
                         if(!user_) {
                             res.status(200).send({ msg: 'doNotExist' , token: '' }) 
                             return
