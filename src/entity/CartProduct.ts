@@ -10,7 +10,7 @@ export class CartProduct extends Product {
     @Column()
     purchaseQuantity: number;
 
-    @ManyToOne(type => Carts , cart => cart.id)
+    @ManyToOne(type => Carts , cart => cart.id  )
     @JoinColumn()
     cart: Carts;
 }
