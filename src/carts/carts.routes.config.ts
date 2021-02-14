@@ -108,7 +108,6 @@ export class CartsRoutes extends CommonRoutesConfig {
                     })
                 }
                 else if (bodyIdList.length < cartIdList.length){ // ok
-                    console.log(';aslkdfj;alskdfj;lasdkfj;alsdkfja;slkdfj');
                     bodyIdList.forEach( el => {
                         if(cartIdList.includes(el)) {
                             cartIdList.splice(cartIdList.indexOf(el) ,1);
@@ -125,7 +124,6 @@ export class CartsRoutes extends CommonRoutesConfig {
                     })
                 }
                 else if (bodyIdList === []) {
-                    console.log('123123123123123123123123');
                     cartIdList.forEach( async el => {
                         await getConnection()
                             .createQueryBuilder()

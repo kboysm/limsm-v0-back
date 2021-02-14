@@ -1,7 +1,10 @@
 import {Entity, PrimaryGeneratedColumn, Column , OneToOne ,JoinColumn , UpdateDateColumn, OneToMany} from "typeorm";
 import { Carts } from './Carts'
 import {OrderInfo} from './OrderInfo'
+import {Product} from './Product'
 // 원격지 mysql의 버전이 5.5.6 , CreateDateColumn 사용불가
+
+type viewRecentProduct_type = [number,number,number,number];
 
 @Entity("user")
 export class User {
@@ -36,4 +39,7 @@ export class User {
 
     @OneToMany(type => OrderInfo, orderinfo => orderinfo.user)
     orderInfo: OrderInfo[];
+
+    @OneToMany( type => Product , pd => pd.id, { onDelete: 'CASCADE' })
+    cartProduct:Product[];
 }

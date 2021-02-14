@@ -1,4 +1,6 @@
-import {Entity , BaseEntity,ManyToOne, PrimaryGeneratedColumn, Column ,OneToMany, CreateDateColumn , UpdateDateColumn} from "typeorm";
+import {Entity , BaseEntity,ManyToOne, PrimaryGeneratedColumn, Column ,OneToMany, JoinColumn , UpdateDateColumn} from "typeorm";
+import {User} from './User'
+
 @Entity("product")
 export class Product {
 
@@ -31,4 +33,8 @@ export class Product {
     
     @Column()
     updatedAt: Date; // 상품 업데이트 날짜
+
+    @ManyToOne(type => User , user => user.id  )
+    @JoinColumn()
+    user: User;
 }
