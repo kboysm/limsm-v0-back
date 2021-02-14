@@ -40,6 +40,6 @@ export class User {
     @OneToMany(type => OrderInfo, orderinfo => orderinfo.user)
     orderInfo: OrderInfo[];
 
-    @OneToMany( type => Product , pd => pd.id, { onDelete: 'CASCADE' })
-    cartProduct:Product[];
+    @Column({default:''}) // typeorm에서 mysql은 array 타입을 사용할 수 없음 
+    viewRecentProduct: string; // 최근 본 상품 어레이대신 스트링으로
 }

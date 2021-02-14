@@ -35,7 +35,6 @@ export class UsersRoutes extends CommonRoutesConfig {
             .post( (req: express.Request, res: express.Response) => {
                 res.status(200).send( `List Of Users `) //DB 생성 후 유저 추가 로직
             })
-        
         this.app.route('/signUp')
             .post( async(req: express.Request, res: express.Response) => {
                 const { email , password , name } = req.body
@@ -114,19 +113,26 @@ export class UsersRoutes extends CommonRoutesConfig {
                 console.log('get 진입')
                 res.status(200).send(`GET requested for id${req.params.userId}`);
             })
-            // .post( (req: express.Request, res: express.Response) => {
-            //     res.status(200).send(`Post requested for id ${req.params}`);
-            // })
-            // .put( (req: express.Request, res: express.Response) => {
-            //     res.status(200).send(`PUT requested for id ${req.params.userId}`);
-            // })
-            // .patch( (req: express.Request, res: express.Response) => {
-            //     res.status(200).send(`PATCH requested for id ${req.params.userId}`);
-            // })
             .delete( (req: express.Request, res: express.Response) => {
                 res.status(200).send(`DELETE requested for id ${req.params.userId}`);
             })
 
+        this.app.route('/user/:userId/:productId')
+            .get( async (req: express.Request, res: express.Response) => {
+                const userId = req.params.userId
+                const productId = req.params.productId
+                try{   
+                    if( !userId || !productId) {
+                        throw new Error('Server Error');
+                    }
+                    const user = await getConnection().getRepository(User).createQueryBuilder("user").where("user.id = :id", { id: userId }).getOne();
+                        user.viewRecentProduct+= req.params.productId
+                        await getConnection().manager.save(user);
+                        res.status(200).send(user);//DB 생성 후 유저 추가 로직
+                } catch(e) {
+                    res.status(200).send(e)//DB 생성 후 유저 추가 로직
+                }
+        })
             return this.app;
     }
 }

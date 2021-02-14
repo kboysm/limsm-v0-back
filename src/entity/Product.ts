@@ -34,7 +34,4 @@ export class Product {
     @Column()
     updatedAt: Date; // 상품 업데이트 날짜
 
-    @ManyToOne(type => User , user => user.id  )
-    @JoinColumn()
-    user: User;
 }
