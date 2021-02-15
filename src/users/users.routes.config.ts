@@ -1,5 +1,6 @@
 import { CommonRoutesConfig } from '../common/common.routes.config';
 import { User } from "../entity/User";
+import { Product } from "../entity/Product";
 // import { myConnection } from '../connection/index'
 import * as express from 'express'
 import {getConnection, getRepository, getConnectionManager  , getManager } from 'typeorm'
@@ -109,9 +110,23 @@ export class UsersRoutes extends CommonRoutesConfig {
                     res.status(200).send('본인이 아닙니다.');
                 }
             })
-            .get( (req: express.Request, res: express.Response) => {
+            .get( async (req: express.Request, res: express.Response) => {
+                const userId = req.params.userId
+                let myPageData = {
+                    user: undefined,
+                    viewProductList: []
+                };
                 console.log('get 진입')
-                res.status(200).send(`GET requested for id${req.params.userId}`);
+                const user = await getConnection().getRepository(User).createQueryBuilder("user").where("user.id = :id", { id: userId }).getOne();
+                const productList = await  getConnection().getRepository(Product).find();
+                myPageData.user = user
+                productList.forEach( item => {
+                    let idx = "" + item.id
+                    if(user.viewRecentProduct.includes(idx)) {
+                        myPageData.viewProductList.push(item)
+                    }
+                })
+                res.status(200).send(myPageData);
             })
             .delete( (req: express.Request, res: express.Response) => {
                 res.status(200).send(`DELETE requested for id ${req.params.userId}`);
