@@ -125,8 +125,38 @@ export class UsersRoutes extends CommonRoutesConfig {
                     if( !userId || !productId) {
                         throw new Error('Server Error');
                     }
+                    // testFunc() {
+                    //     let test1 = '1234'
+                    //     let testInput = 2
+                    //     let result = ''
+                    
+                    //     if(!test1.includes(''+testInput)) {
+                    //       result += (testInput + test1.substring(1))
+                    //       console.log(result);
+                    //     }
+                    //     else if (test1.includes(''+testInput)) {
+                    //       const idx = test1.indexOf(''+testInput)
+                    //       result = ''+testInput;
+                    //       for(let i=0 ; i<4 ; i++) {
+                    //         if(idx === i) continue
+                    //         result += test1[i];
+                    //       }
+                    //       console.log(result);
+                    //     }
+                    //   }
                     const user = await getConnection().getRepository(User).createQueryBuilder("user").where("user.id = :id", { id: userId }).getOne();
-                        user.viewRecentProduct+= req.params.productId
+                    if( user.viewRecentProduct.length < 4 ){
+                        user.viewRecentProduct += req.params.productId
+                        console.log(user.viewRecentProduct , productId)
+                    }
+                    else if ( user.viewRecentProduct.length === 4 ) {
+                        if (user.viewRecentProduct.includes(''+productId)) {
+                            console.log(user.viewRecentProduct , productId)
+                        }
+                        else {
+                            console.log(user.viewRecentProduct , productId)
+                        }
+                    }
                         await getConnection().manager.save(user);
                         res.status(200).send(user);//DB 생성 후 유저 추가 로직
                 } catch(e) {
