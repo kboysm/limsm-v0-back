@@ -145,19 +145,42 @@ export class UsersRoutes extends CommonRoutesConfig {
                     //     }
                     //   }
                     const user = await getConnection().getRepository(User).createQueryBuilder("user").where("user.id = :id", { id: userId }).getOne();
-                    if( user.viewRecentProduct.length < 4 ){
+                    if( user.viewRecentProduct.length < 4 && !user.viewRecentProduct.includes('' + productId)){
                         user.viewRecentProduct += req.params.productId
                         console.log(user.viewRecentProduct , productId)
                     }
+                    else if ( user.viewRecentProduct.length < 4 && user.viewRecentProduct.includes('' + productId) ) {
+                        const idx = user.viewRecentProduct.indexOf(''+productId)
+                        let result = '' + productId;
+                            for(let i=0 ; i < user.viewRecentProduct.length ; i++) {
+                                if(idx === i) continue;
+                                result += user.viewRecentProduct[i];
+                            }
+                            user.viewRecentProduct = result;
+                        //       console.log(result);
+                    }
                     else if ( user.viewRecentProduct.length === 4 ) {
                         if (user.viewRecentProduct.includes(''+productId)) {
-                            console.log(user.viewRecentProduct , productId)
+                            const idx = user.viewRecentProduct.indexOf(''+productId)
+                            let result = ''
+                            result = ''+productId;
+                            for(let i=0 ; i<4 ; i++) {
+                                if(idx === i) continue
+                                result += user.viewRecentProduct[i];
+                            }
+                            user.viewRecentProduct = result;
                         }
                         else {
-                            console.log(user.viewRecentProduct , productId)
+                            let cloneResult = ''+productId
+                            for(let i=0 ; i<4 ; i++) {
+                                if(0 === i) continue
+                                cloneResult += user.viewRecentProduct[i];
+                            }
+                            user.viewRecentProduct = cloneResult;
                         }
                     }
                         await getConnection().manager.save(user);
+                        console.log(user.viewRecentProduct)
                         res.status(200).send(user);//DB 생성 후 유저 추가 로직
                 } catch(e) {
                     res.status(200).send(e)//DB 생성 후 유저 추가 로직
