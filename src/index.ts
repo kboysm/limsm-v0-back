@@ -14,11 +14,12 @@ import { CartsRoutes } from './carts/carts.routes.config';
 import debug from 'debug'
 import connectDB from './connection/index'
 import { getConnection, getConnectionManager, createQueryBuilder } from 'typeorm'
-import { userList , productList}  from './testData/index'
+import { userList , productList, testOrderInfo, buypro_1, buypro_2}  from './testData/index'
 import { User } from './entity/User'
 import { CartProduct } from './entity/CartProduct'
 import { Product } from './entity/Product'
 import { Carts } from './entity/Carts'
+import { OrderInfo } from './entity/OrderInfo';
 
 dotenv.config();
 
@@ -66,6 +67,10 @@ const startConnect = async () => {
     console.log("typeorm mysql start"); 
         const connection = await connectDB()
         // const users = await connection.manager.find(User);
+        // const testUser = users[3]
+        // const TestOrderInfo = await connection.manager.find(OrderInfo)
+        // testUser.orderInfo = [TestOrderInfo[0]]
+        //         await connection.manager.save(testUser);
         // const adminSearch = users.map( item => item.name );
         // userList.forEach( async item => {
         //     if(!adminSearch.includes(item.name)){
@@ -85,7 +90,10 @@ const startConnect = async () => {
         // })
         //
         //     console.log("typeorm mysql end");
-    
+                // await connection.manager.save(buypro_1);
+                // await connection.manager.save(buypro_2);
+                // await connection.manager.save(testOrderInfo);
+
 }
 startConnect();
 

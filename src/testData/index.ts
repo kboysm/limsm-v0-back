@@ -1,6 +1,7 @@
 import { User } from "../entity/User";
 import { Product } from "../entity/Product";
 import { OrderInfo } from "../entity/OrderInfo";
+import { BuyProduct } from "../entity/BuyProduct";
 import crypto from 'crypto'
 import secretKey from '../secretKey/index'
 const userNameList: Array<string> = ['admin','user1','user2','user3'];
@@ -66,7 +67,8 @@ const salesQuantityList: Array<number> = [
 const priceList: Array<number> = [
     758990,998990,1778990,6300000,359000,3798990,1838990,468990
 ]
-
+export const buypro_1 = new BuyProduct()
+export const buypro_2 = new BuyProduct()
 for(let i=0 ; i <8 ; i++){
     const product: Product = new Product();
     product.imgUrl = 'img/'+ i +'.PNG'
@@ -79,5 +81,40 @@ for(let i=0 ; i <8 ; i++){
     product.createdAt= new Date();
     product.updatedAt= new Date();
     productList.push(product);
+    if(i === 0) {
+    buypro_1.imgUrl = 'img/'+ i +'.PNG'
+    buypro_1.name= ProductNameList[i];
+    buypro_1.description = descriptionList[i];
+    buypro_1.quantity= quantityList[i];
+    buypro_1.grade= gradeList[i];
+    buypro_1.salesQuantity= salesQuantityList[i];
+    buypro_1.price= priceList[i];
+    buypro_1.createdAt= new Date();
+    buypro_1.updatedAt= new Date();
+    }
+    else if( i=== 1 ) {
+    buypro_2.imgUrl = 'img/'+ i +'.PNG'
+    buypro_2.name= ProductNameList[i];
+    buypro_2.description = descriptionList[i];
+    buypro_2.quantity= quantityList[i];
+    buypro_2.grade= gradeList[i];
+    buypro_2.salesQuantity= salesQuantityList[i];
+    buypro_2.price= priceList[i];
+    buypro_2.createdAt= new Date();
+    buypro_2.updatedAt= new Date();
+    }
 }
 
+buypro_1.purchaseQuantity= 1
+buypro_2.purchaseQuantity= 1
+
+export const testOrderInfo = new OrderInfo();
+testOrderInfo.destination = '서울시 도봉구 도봉동'
+testOrderInfo.name = '테스트'
+testOrderInfo.tel = '010-0000-9999'
+testOrderInfo.createdAt= new Date()
+testOrderInfo.updatedAt= new Date()
+testOrderInfo.payment= 3000000
+testOrderInfo.buyProduct= [
+    buypro_1,buypro_2
+]
