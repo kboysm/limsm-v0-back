@@ -1,5 +1,6 @@
-import {Entity , BaseEntity, PrimaryGeneratedColumn, Column , CreateDateColumn , UpdateDateColumn, ManyToOne} from "typeorm";
+import {Entity , BaseEntity, PrimaryGeneratedColumn, Column , OneToMany , UpdateDateColumn, ManyToOne} from "typeorm";
 import { User } from './User'
+import { BuyProduct } from './BuyProduct'
 @Entity("orderinfo")
 export class OrderInfo {
 
@@ -27,4 +28,6 @@ export class OrderInfo {
     @ManyToOne(type => User , user => user.orderInfo)
     user: User;
 
+    @OneToMany( type => BuyProduct , bp => bp.orderInfo, { onDelete: 'CASCADE' })
+    buyProduct:BuyProduct[];
 }

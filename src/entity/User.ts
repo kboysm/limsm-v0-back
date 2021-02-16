@@ -22,6 +22,9 @@ export class User {
     address: string; // 주소
     
     @Column()
+    tel: string; // 전번
+
+    @Column()
     createdAt: Date; //가입 날짜
     
     @Column()

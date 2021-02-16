@@ -1,5 +1,6 @@
 import { User } from "../entity/User";
 import { Product } from "../entity/Product";
+import { OrderInfo } from "../entity/OrderInfo";
 import crypto from 'crypto'
 import secretKey from '../secretKey/index'
 const userNameList: Array<string> = ['admin','user1','user2','user3'];
@@ -19,6 +20,7 @@ for(let i=0 ; i <4 ; i++){
     user.createdAt = new Date();
     user.updatedAt = new Date();
     user.email = userIdList[i]+'@asd.asd';
+    user.tel = '010-0000-0000';
     user.password = crypto.createHmac('sha256',secretKey.cryptoKey).update(userPwList[i]).digest('hex')
 
     userList.push(user);
