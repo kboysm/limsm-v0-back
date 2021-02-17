@@ -1,6 +1,8 @@
 import { CommonRoutesConfig } from '../common/common.routes.config';
 import { User } from "../entity/User";
 import { Product } from "../entity/Product";
+import { OrderInfo } from "../entity/OrderInfo";
+import { BuyProduct } from "../entity/BuyProduct";
 // import { myConnection } from '../connection/index'
 import * as express from 'express'
 import {getConnection, getRepository, getConnectionManager  , getManager } from 'typeorm'
@@ -114,11 +116,24 @@ export class UsersRoutes extends CommonRoutesConfig {
                 const userId = req.params.userId
                 let myPageData = {
                     user: undefined,
-                    viewProductList: []
+                    viewProductList: [],
+                    orderInfo:undefined
                 };
                 console.log('get 진입')
-                const user = await getConnection().getRepository(User).createQueryBuilder("user").where("user.id = :id", { id: userId }).getOne();
+                const user = await getConnection().getRepository(User).createQueryBuilder("user").leftJoinAndSelect("user.orderInfo", "orderinfo").where("user.id = :id", { id: userId }).getOne();
                 const productList = await  getConnection().getRepository(Product).find();
+                // const orderInfo = await  getConnection().getRepository(OrderInfo).find({ relations: ["buyproduct"] });
+                const orderInfoNumber = user.orderInfo.reduce(( pre,cur )=> {
+                    return pre.id > cur.id ? pre : cur;
+                })
+                const orderInfo =  await getConnection()
+                .getRepository(OrderInfo)
+                .createQueryBuilder("orderinfo")
+                .leftJoinAndSelect("orderinfo.buyProduct", "buyproduct")
+                .where("orderinfo.id = :id", { id: orderInfoNumber.id })
+                .getOne();
+                
+                myPageData.orderInfo = orderInfo
                 myPageData.user = user
                 productList.forEach( item => {
                     let idx = "" + item.id
