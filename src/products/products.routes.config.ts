@@ -21,7 +21,7 @@ export class ProductsRoutes extends CommonRoutesConfig {
                     res.status(200).send(e)//DB 생성 후 유저 추가 로직
                 }
             })
-        this.app.route('/product/buy/:userId/:productId')
+        this.app.route('/product/buy/:userId/:productId') // 바로구매
         .post( async (req: express.Request, res: express.Response) => {
             try{   
                 const userId = req.params.userId;
@@ -62,7 +62,7 @@ export class ProductsRoutes extends CommonRoutesConfig {
                 await getConnection().manager.save(user);
                 res.status(200).send({result: true , msg:'성공'})//DB 생성 후 유저 추가 로직
             } catch(e) {
-                res.status(200).send({result: true , msg:e})//DB 생성 후 유저 추가 로직
+                res.status(200).send({result: false , msg:e})//DB 생성 후 유저 추가 로직
             }
         })
             return this.app;

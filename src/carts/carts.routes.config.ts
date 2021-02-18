@@ -1,7 +1,10 @@
 import { CommonRoutesConfig } from '../common/common.routes.config';
 import { Carts } from "../entity/Carts";
 import { CartProduct } from "../entity/CartProduct";
+import { BuyProduct } from "../entity/BuyProduct";
+import { OrderInfo } from "../entity/OrderInfo";
 import { Product } from "../entity/Product";
+import { User } from "../entity/User";
 // import { myConnection } from '../connection/index'
 import * as express from 'express'
 import {getConnection, getRepository, getConnectionManager  , getManager } from 'typeorm'
@@ -156,6 +159,79 @@ export class CartsRoutes extends CommonRoutesConfig {
             }catch(e) {
                 res.status(500).send( e );
             }
+        })
+        this.app.route('/carts/buy/:cartId/:userId')
+        .post( async (req: express.Request, res: express.Response) => {
+            const cartId = req.params.cartId
+            const userId = req.params.userId
+            const { deliveryInfo , deliveryPrice } = req.body
+            let totalPrice = deliveryPrice
+            try{
+            let buyProductList: Array<BuyProduct> = []
+            const user = await getConnection().getRepository(User).createQueryBuilder("user")
+                .leftJoinAndSelect("user.orderInfo", "orderinfo")
+                .where("user.id = :id", { id: userId }).getOne();
+            const cart = await getConnection()
+                        .getRepository(Carts)
+                        .createQueryBuilder("carts")
+                        .leftJoinAndSelect("carts.cartProduct", "cartproduct")
+                        .where("carts.id = :id", { id: cartId })
+                        .getOne();
+            const orderInfo = new OrderInfo();
+            cart.cartProduct.forEach( async item => {
+                    try{
+                        const buyProductClone = new BuyProduct();
+                        buyProductClone.imgUrl = item.imgUrl
+                        buyProductClone.name = item.name
+                        buyProductClone.description = item.description
+                        buyProductClone.quantity = item.quantity
+                        buyProductClone.grade = item.grade
+                        buyProductClone.salesQuantity = item.salesQuantity
+                        buyProductClone.price = item.price
+                        totalPrice += item.price
+                        buyProductClone.createdAt = new Date()
+                        buyProductClone.updatedAt = new Date()
+                        buyProductClone.purchaseQuantity = item.purchaseQuantity
+                        buyProductList.push(buyProductClone);
+                        orderInfo.buyProduct = [...orderInfo.buyProduct , buyProductClone];
+                        await getConnection().manager.save(buyProductClone);
+                    } catch(e) {
+
+                    }
+                    // await getConnection()
+                    // .createQueryBuilder()
+                    // .delete()
+                    // .from(CartProduct)
+                    // .where("cartproduct.id = :id", { id:item.id })
+                    // .execute();
+            })
+            // const testData = buyProductList.map( async item => {
+            //     return await getConnection().manager.save(item);
+            // })
+            // let buyProductList2 = []
+            // Promise.all(testData).then( v => {
+            //     buyProductList2.push(v)
+            // })
+            console.log(buyProductList)
+
+            orderInfo.destination = deliveryInfo.destination;
+            orderInfo.name = deliveryInfo.name;
+            orderInfo.tel = deliveryInfo.tel;
+            orderInfo.createdAt = new Date();
+            orderInfo.updatedAt = new Date();
+            orderInfo.payment = totalPrice;
+            orderInfo.buyProduct = [...buyProductList];
+                    await getConnection().manager.save(orderInfo);
+
+
+            user.orderInfo = [...user.orderInfo , orderInfo ];
+            await getConnection().manager.save(user);
+            console.log(totalPrice , deliveryInfo , deliveryPrice)
+            res.status(200).send({ result: true , msg:'성공' })
+        }
+        catch(e) {
+            res.status(200).send({ result: false , msg:e })
+        }
         })
             return this.app;
     }
