@@ -3,6 +3,7 @@ import { User } from "../entity/User";
 import { Product } from "../entity/Product";
 import { OrderInfo } from "../entity/OrderInfo";
 import { BuyProduct } from "../entity/BuyProduct";
+import { Carts } from "../entity/Carts";
 // import { myConnection } from '../connection/index'
 import * as express from 'express'
 import {getConnection, getRepository, getConnectionManager  , getManager } from 'typeorm'
@@ -55,13 +56,18 @@ export class UsersRoutes extends CommonRoutesConfig {
                             if(user){
                                 res.status(200).send('idExists')
                             }else {
+                                const cart = new Carts();
+                                await getConnection().manager.save(cart);
+                                newUser.carts = cart;
                                 await getConnection().createQueryBuilder().insert().into(User).values(
                                     newUser
-                                ).execute().then( r=> {
+                                ).execute().then(async r=> {
                                     res.status(200).send('signUp')
                                 }).catch(e => {
                                     res.status(200).send( 'signUpFail' ) //DB 생성 후 유저 추가 로직
                                 });
+                                
+                        //         await connection.manager.save(item);
                             }
                             // res.status(200).send(user)
                 }
