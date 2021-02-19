@@ -167,7 +167,6 @@ export class CartsRoutes extends CommonRoutesConfig {
             const { deliveryInfo , deliveryPrice } = req.body
             let totalPrice = deliveryPrice
             try{
-            let buyProductList: Array<BuyProduct> = []
             const user = await getConnection().getRepository(User).createQueryBuilder("user")
                 .leftJoinAndSelect("user.orderInfo", "orderinfo")
                 .where("user.id = :id", { id: userId }).getOne();
@@ -178,8 +177,16 @@ export class CartsRoutes extends CommonRoutesConfig {
                         .where("carts.id = :id", { id: cartId })
                         .getOne();
             const orderInfo = new OrderInfo();
-            cart.cartProduct.forEach( async item => {
-                    try{
+            orderInfo.destination = deliveryInfo.destination;
+            orderInfo.name = deliveryInfo.name;
+            orderInfo.tel = deliveryInfo.tel;
+            orderInfo.createdAt = new Date();
+            orderInfo.updatedAt = new Date();
+            orderInfo.payment = totalPrice;
+            orderInfo.buyProduct = [];
+            let save_orderInfo = await getConnection().manager.save(orderInfo);
+
+            let testData = cart.cartProduct.map( async (item,idx) => {
                         const buyProductClone = new BuyProduct();
                         buyProductClone.imgUrl = item.imgUrl
                         buyProductClone.name = item.name
@@ -192,37 +199,24 @@ export class CartsRoutes extends CommonRoutesConfig {
                         buyProductClone.createdAt = new Date()
                         buyProductClone.updatedAt = new Date()
                         buyProductClone.purchaseQuantity = item.purchaseQuantity
-                        buyProductList.push(buyProductClone);
-                        orderInfo.buyProduct = [...orderInfo.buyProduct , buyProductClone];
-                        await getConnection().manager.save(buyProductClone);
-                    } catch(e) {
-
-                    }
-                    // await getConnection()
-                    // .createQueryBuilder()
-                    // .delete()
-                    // .from(CartProduct)
-                    // .where("cartproduct.id = :id", { id:item.id })
-                    // .execute();
+                        await getConnection()
+                        .createQueryBuilder()
+                        .delete()
+                        .from(CartProduct)
+                        .where("cartproduct.id = :id", { id:item.id })
+                        .execute();
+                        return await getConnection().manager.save(buyProductClone);
+                    })
+           
+            Promise.all(testData).then( async r=> {
+                const orderInfoPush = await getConnection()
+                        .getRepository(OrderInfo)
+                        .createQueryBuilder("orderinfo")
+                        .where("orderinfo.id = :id", { id: save_orderInfo.id })
+                        .getOne();
+                        orderInfoPush.buyProduct = r
+                        await getConnection().manager.save(orderInfoPush);
             })
-            // const testData = buyProductList.map( async item => {
-            //     return await getConnection().manager.save(item);
-            // })
-            // let buyProductList2 = []
-            // Promise.all(testData).then( v => {
-            //     buyProductList2.push(v)
-            // })
-            console.log(buyProductList)
-
-            orderInfo.destination = deliveryInfo.destination;
-            orderInfo.name = deliveryInfo.name;
-            orderInfo.tel = deliveryInfo.tel;
-            orderInfo.createdAt = new Date();
-            orderInfo.updatedAt = new Date();
-            orderInfo.payment = totalPrice;
-            orderInfo.buyProduct = [...buyProductList];
-                    await getConnection().manager.save(orderInfo);
-
 
             user.orderInfo = [...user.orderInfo , orderInfo ];
             await getConnection().manager.save(user);
