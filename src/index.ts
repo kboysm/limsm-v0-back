@@ -11,6 +11,7 @@ import { CommonRoutesConfig } from './common/common.routes.config';
 import { UsersRoutes } from './users/users.routes.config';
 import { ProductsRoutes } from './products/products.routes.config';
 import { CartsRoutes } from './carts/carts.routes.config';
+import { QuestionsRoutes } from './question/questions.routes.config';
 import debug from 'debug'
 import connectDB from './connection/index'
 import { getConnection, getConnectionManager, createQueryBuilder } from 'typeorm'
@@ -43,6 +44,7 @@ app.use( expressWinston.logger({
 routes.push( new UsersRoutes(app) );
 routes.push( new ProductsRoutes(app) );
 routes.push( new CartsRoutes(app) );
+routes.push( new QuestionsRoutes(app) );
 
 app.use(expressWinston.errorLogger({
     transports: [

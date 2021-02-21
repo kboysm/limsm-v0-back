@@ -63,7 +63,7 @@ export class UsersRoutes extends CommonRoutesConfig {
                                     newUser
                                 ).execute().then(async r=> {
                                     res.status(200).send('signUp')
-                                }).catch(e => {
+                                }).catch( e => {
                                     res.status(200).send( 'signUpFail' ) //DB 생성 후 유저 추가 로직
                                 });
                                 
