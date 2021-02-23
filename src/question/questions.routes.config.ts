@@ -5,6 +5,7 @@ import { BuyProduct } from "../entity/BuyProduct";
 import { OrderInfo } from "../entity/OrderInfo";
 import { Product } from "../entity/Product";
 import { User } from "../entity/User";
+import moment from 'moment'
 let fs = require('fs');
 // import { myConnection } from '../connection/index'
 import * as express from 'express'
@@ -31,14 +32,24 @@ export class QuestionsRoutes extends CommonRoutesConfig {
                 .createQueryBuilder("product")
                 .where("product.id = :id", { id: productId }).getOne();
             const userId = req.params.userId
+            const user = await getConnection().getRepository(User).createQueryBuilder("user").where("user.id = :id", { id: userId }).getOne();
             const content = req.body.content
-            const createdAt = new Date()
-            const title = product.name +'$lsm$'+ new String(createdAt) +'$lsm$'+ userId +'$lsm$'
-            // console.log( content );
+            const createdAt = new Date();
+            const title = product.name.replace(/ /gi, '') +'_lsm_'+ moment(createdAt).format('YYMMDD_hhmmss') +'_lsm_'+ userId +'_lsm_'
             try{   
-                fs.writeFile(`./src/fileStorage/${title}.txt` , content ,( err ) => {
-                    if(err) throw new Error('fileError')
+                const question = new Question();
+                question.contentName = title
+                question.createdAt = createdAt
+                question.updatedAt = createdAt
+                question.user = user
+                
+                fs.writeFile(`./src/fileStorage/${title}.txt` , content ,async ( err ) => {
+                    if(err) {
+                        console.log(err)
+                        throw new Error('fileError')
+                    }
                     console.log(title+' created!')
+                    await getConnection().manager.save(question);
                 })
                 res.status(200).send('asdasd')
                 
