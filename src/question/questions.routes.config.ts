@@ -19,7 +19,7 @@ export class QuestionsRoutes extends CommonRoutesConfig {
         this.app.route('/questions')
             .get( async (req: express.Request, res: express.Response) => {
                 try{   
-                    const questionList = await  getConnection().getRepository(Question).find();
+                    const questionList = await  getConnection().getRepository(Question).find({ relations: ["user"] });
                     res.status(200).send(questionList)
                 } catch(e) {
                     res.status(200).send(e)
