@@ -21,7 +21,7 @@ import { CartProduct } from './entity/CartProduct'
 import { Product } from './entity/Product'
 import { Carts } from './entity/Carts'
 import { OrderInfo } from './entity/OrderInfo';
-
+const fs = require('fs')
 dotenv.config();
 
 const app: express.Application = express();
@@ -29,6 +29,12 @@ const server: http.Server = http.createServer(app);
 const port = process.env.PORT || 3000;
 const routes: Array<CommonRoutesConfig> = [];
 const debugLog: debug.IDebugger = debug('app');
+
+const makeFolder = (dir) => {
+    if(!fs.existsSync(dir)) {
+        fs.mkdirSync(dir);
+    }
+}
 
 app.use( bodyparser.json() );
 app.use( cors() );
@@ -105,4 +111,9 @@ server.listen(port, ()=>{
     routes.forEach((route: CommonRoutesConfig)=> {
         debugLog(`Routes configured from ${route.getName()}`);
     })
+
+    if(process.env.NODE_ENV === 'production'){
+        makeFolder('./dist/fileStorage')
+    }
+    
 })

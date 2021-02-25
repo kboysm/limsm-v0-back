@@ -18,11 +18,28 @@ export class QuestionsRoutes extends CommonRoutesConfig {
     configureRoutes() {
         this.app.route('/questions')
             .get( async (req: express.Request, res: express.Response) => {
-                try{   
+                try{
                     const questionList = await  getConnection().getRepository(Question).find({ relations: ["user"] });
                     res.status(200).send(questionList)
                 } catch(e) {
                     res.status(200).send(e)
+                }
+            })
+            this.app.route('/question/:questionId')
+            .get( async (req: express.Request, res: express.Response) => {
+                try{
+                    const questionId = req.params.questionId
+                    const questionArticle = await  getConnection().getRepository(Question).createQueryBuilder("question").where("question.id = :id", { id: questionId }).getOne();
+                    const path_ = process.env.NODE_ENV === 'development' ? 'src' : 'dist'
+                    // console.log(questionArticle.contentName)
+                    fs.readFile(`./${path_}/fileStorage/${questionArticle.contentName}.txt`,'utf8',(err,data) => {
+                        if(err) {
+                            res.status(500).send(err)
+                        }
+                        res.status(200).send(data)
+                    });
+                } catch(e) {
+                    res.status(500).send(e)
                 }
             })
         this.app.route('/question/:productId/:userId')
