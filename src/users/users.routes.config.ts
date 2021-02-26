@@ -125,14 +125,17 @@ export class UsersRoutes extends CommonRoutesConfig {
                     viewProductList: [],
                     orderInfo:undefined
                 };
-                console.log('get 진입')
                 const user = await getConnection().getRepository(User).createQueryBuilder("user").leftJoinAndSelect("user.orderInfo", "orderinfo").where("user.id = :id", { id: userId }).getOne();
+                console.log(user)
                 const productList = await  getConnection().getRepository(Product).find();
                 // const orderInfo = await  getConnection().getRepository(OrderInfo).find({ relations: ["buyproduct"] });
-                const orderInfoNumber = user.orderInfo.reduce(( pre,cur )=> {
-                    return pre.id > cur.id ? pre : cur;
-                })
-                const orderInfo =  await getConnection()
+               
+                if(user.orderInfo.length>0){
+
+                    const orderInfoNumber = user.orderInfo.reduce(( pre,cur )=> {
+                        return pre.id > cur.id ? pre : cur;
+                    })
+                    const orderInfo =  await getConnection()
                 .getRepository(OrderInfo)
                 .createQueryBuilder("orderinfo")
                 .leftJoinAndSelect("orderinfo.buyProduct", "buyproduct")
@@ -140,6 +143,9 @@ export class UsersRoutes extends CommonRoutesConfig {
                 .getOne();
                 
                 myPageData.orderInfo = orderInfo
+            }
+                
+                
                 myPageData.user = user
                 productList.forEach( item => {
                     let idx = "" + item.id
@@ -147,7 +153,25 @@ export class UsersRoutes extends CommonRoutesConfig {
                         myPageData.viewProductList.push(item)
                     }
                 })
+                console.log(myPageData)
                 res.status(200).send(myPageData);
+            })
+            .post( async (req: express.Request, res: express.Response) => {
+                const user = req.body;
+                const cryptoPassword = crypto.createHmac('sha256',secretKey.cryptoKey).update(user.password).digest('hex')
+                const updatedUser = await getConnection()
+                .createQueryBuilder()
+                .update(User)
+                .set({ 
+                    password: cryptoPassword, 
+                    address: user.address,
+                    name: user.name,
+                    tel: user.tel
+                })
+                .where("id = :id", { id: user.id })
+                .execute();
+                console.log(updatedUser)
+                res.status(200).send(updatedUser);
             })
             .delete( (req: express.Request, res: express.Response) => {
                 res.status(200).send(`DELETE requested for id ${req.params.userId}`);

@@ -42,6 +42,24 @@ export class QuestionsRoutes extends CommonRoutesConfig {
                     res.status(500).send(e)
                 }
             })
+            this.app.route('/question/user/:userId')
+            .get( async (req: express.Request, res: express.Response) => {
+                try{
+                    const userId = req.params.userId
+                    const user = await getConnection().getRepository(User).createQueryBuilder("user").leftJoinAndSelect("user.Question", "orderinfo").where("user.id = :id", { id: userId }).getOne();
+                    const result = []
+                    const path_ = process.env.NODE_ENV === 'development' ? 'src' : 'dist'
+                    // console.log(questionArticle.contentName)
+                    for( let i=0 ; i<user.Question.length ; i++) {
+                       const data = fs.readFileSync(`./${path_}/fileStorage/${user.Question[i].contentName}.txt`,'utf8');
+                       result.push(data);
+                    }
+                            // res.status(500).send(err)
+                        res.status(200).send(result)
+                } catch(e) {
+                    res.status(500).send(e)
+                }
+            })
         this.app.route('/question/:productId/:userId')
         .post( async (req: express.Request, res: express.Response) => {
             const productId = req.params.productId
