@@ -11,7 +11,7 @@ module.exports =  {
    "username": 'root',
    "password": '1234',
    "database": 'limsm',
-   "synchronize": process.env.NODE_ENV === 'development' ? false : true,
+   "synchronize": process.env.NODE_ENV === 'development' ? true : false,
    "logging": process.env.NODE_ENV === 'development' ? false : true,
    "entities": [
       process.env.NODE_ENV === 'development' ? "src/entity/*.*" : "dist/entity/*.*"

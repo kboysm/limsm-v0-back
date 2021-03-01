@@ -75,10 +75,7 @@ const startConnect = async () => {
     console.log("typeorm mysql start"); 
         const connection = await connectDB()
         const users = await connection.manager.find(User);
-        // const testUser = users[3]
-        // const TestOrderInfo = await connection.manager.find(OrderInfo)
-        // testUser.orderInfo = [TestOrderInfo[0]]
-        //         await connection.manager.save(testUser);
+
         const adminSearch = users.map( item => item.name );
         userList.forEach( async item => {
             if(!adminSearch.includes(item.name)){
@@ -90,17 +87,13 @@ const startConnect = async () => {
         })
         const products = await connection.manager.find(Product);
         const nameSearch = products.map( item => item.name );
-        console.log('asdasdasd : ' , productList)
+        // console.log('asdasdasd : ' , productList)
         productList.forEach( async item => {
             if(!nameSearch.includes(item.name)){
                 await connection.manager.save(item);
             }
         })
-        //
-        //     console.log("typeorm mysql end");
-                // await connection.manager.save(buypro_1);
-                // await connection.manager.save(buypro_2);
-                // await connection.manager.save(testOrderInfo);
+        
 
 }
 startConnect();

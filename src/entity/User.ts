@@ -3,6 +3,7 @@ import { Carts } from './Carts'
 import {OrderInfo} from './OrderInfo'
 import {Product} from './Product'
 import {Question} from './Questions'
+import {ProductReview} from './ProductReview'
 // 원격지 mysql의 버전이 5.5.6 , CreateDateColumn 사용불가
 
 type viewRecentProduct_type = [number,number,number,number];
@@ -46,6 +47,9 @@ export class User {
 
     @OneToMany(type => Question, question => question.user)
     Question: Question[];
+
+    @OneToMany(type => ProductReview, productReview => productReview.user)
+    productReview: ProductReview[];
 
     @Column({default:''}) // typeorm에서 mysql은 array 타입을 사용할 수 없음 
     viewRecentProduct: string; // 최근 본 상품 어레이대신 스트링으로

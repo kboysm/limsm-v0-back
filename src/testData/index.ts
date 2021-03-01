@@ -2,6 +2,7 @@ import { User } from "../entity/User";
 import { Product } from "../entity/Product";
 import { OrderInfo } from "../entity/OrderInfo";
 import { BuyProduct } from "../entity/BuyProduct";
+import { ProductReview } from "../entity/ProductReview";
 import crypto from 'crypto'
 import secretKey from '../secretKey/index'
 const userNameList: Array<string> = ['admin','user1','user2','user3'];
@@ -67,10 +68,12 @@ const salesQuantityList: Array<number> = [
 const priceList: Array<number> = [
     758990,998990,1778990,6300000,359000,3798990,1838990,468990
 ]
+
 export const buypro_1 = new BuyProduct()
 export const buypro_2 = new BuyProduct()
 for(let i=0 ; i <8 ; i++){
     const product: Product = new Product();
+    const productReview: ProductReview = new ProductReview();
     product.imgUrl = 'img/'+ i +'.PNG'
     product.name= ProductNameList[i];
     product.description = descriptionList[i];
@@ -81,6 +84,8 @@ for(let i=0 ; i <8 ; i++){
     product.createdAt= new Date();
     product.updatedAt= new Date();
     productList.push(product);
+
+
     if(i === 0) {
     buypro_1.imgUrl = 'img/'+ i +'.PNG'
     buypro_1.name= ProductNameList[i];
