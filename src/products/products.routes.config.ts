@@ -66,25 +66,25 @@ export class ProductsRoutes extends CommonRoutesConfig {
                 res.status(200).send({result: false , msg:e})//DB 생성 후 유저 추가 로직
             }
         })
-        // this.app.route('/productListCreate')
-        //     .get( async (req: express.Request, res: express.Response) => {
-        //         const user = await getConnection().getRepository(User).createQueryBuilder("user").where("user.name = :name", { name: 'admin' }).getOne();
-        //         const productList = await  getConnection().getRepository(Product).find();
-        //         productList.forEach ( async (item: Product) => {
-        //             for(let i=0 ; i < 3 ; i++){
-        //                 const productReview = new ProductReview();
-        //                 productReview.imgUrl = item.imgUrl
-        //                 productReview.title = item.name+'_test_'+i
-        //                 productReview.user = user
-        //                 productReview.product = item
-        //                 productReview.content = '배송 빠르고 물건 좋네요!'
-        //                 productReview.createAt = new Date()
-        //                 productReview.updatedAt = new Date()
-        //                 await getConnection().manager.save(productReview);
-        //             }
-        //         })
-        //         res.status(200).send('test')
-        //     })
+        this.app.route('/productListCreate')
+            .get( async (req: express.Request, res: express.Response) => {
+                const user = await getConnection().getRepository(User).createQueryBuilder("user").where("user.name = :name", { name: 'admin' }).getOne();
+                const productList = await  getConnection().getRepository(Product).find();
+                productList.forEach ( async (item: Product) => {
+                    for(let i=0 ; i < 3 ; i++){
+                        const productReview = new ProductReview();
+                        productReview.imgUrl = item.imgUrl
+                        productReview.title = item.name+'_test_'+i
+                        productReview.user = user
+                        productReview.product = item
+                        productReview.content = '배송 빠르고 물건 좋네요!'
+                        productReview.createAt = new Date()
+                        productReview.updatedAt = new Date()
+                        await getConnection().manager.save(productReview);
+                    }
+                })
+                res.status(200).send('test')
+            })
         this.app.route('/productList/:productId')
             .get( async (req: express.Request, res: express.Response) => {
                 try {
