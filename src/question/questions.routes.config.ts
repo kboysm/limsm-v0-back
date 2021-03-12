@@ -50,9 +50,13 @@ export class QuestionsRoutes extends CommonRoutesConfig {
                     const result = []
                     const path_ = process.env.NODE_ENV === 'development' ? 'src' : 'dist'
                     // console.log(questionArticle.contentName)
+                    if(path_ === 'dist') {
+                        result.push('<h1>제목: 스토리지가 존재하지 않아 배포 서버에서 사용 불가</h1><p>s3 버킷같은 스토리지 필요</p>')
+                        res.status(200).send(result)
+                    }
                     for( let i=0 ; i<user.Question.length ; i++) {
-                       const data = fs.readFileSync(`./${path_}/fileStorage/${user.Question[i].contentName}.txt`,'utf8');
-                       result.push(data);
+                        const data = fs.readFileSync(`./${path_}/fileStorage/${user.Question[i].contentName}.txt`,'utf8');
+                        result.push(data);
                     }
                             // res.status(500).send(err)
                         res.status(200).send(result)

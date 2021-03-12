@@ -73,7 +73,6 @@ export const buypro_1 = new BuyProduct()
 export const buypro_2 = new BuyProduct()
 for(let i=0 ; i <8 ; i++){
     const product: Product = new Product();
-    const productReview: ProductReview = new ProductReview();
     product.imgUrl = 'img/'+ i +'.PNG'
     product.name= ProductNameList[i];
     product.description = descriptionList[i];
